@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The Slums — compound notes, surgery atlas, and links. Educational reference only." />
+  <meta name="theme-color" content="#0d0d0c" />
+  <title>The Slums / compounds, looks &amp; surgery notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="retro.css" />
+</head>
+<body>
+<script data-goatcounter="https://theslums.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+  <nav class="nav">
+    <div class="nav-chrome">
+    <button type="button" class="nav-logo" id="navLogo" aria-label="Home">The Slums</button>
+    <button type="button" class="nav-burger" id="navBurger" aria-expanded="false" aria-controls="navSheet" aria-haspopup="true" aria-label="Menu">≡</button>
+    <div class="nav-sheet" id="navSheet">
+      <aside class="nav-sheet-panel" aria-labelledby="navSheetTitle">
+        <div class="nav-sheet-bar">
+          <span id="navSheetTitle" class="nav-sheet-title">Sections</span>
+          <button type="button" class="nav-sheet-close" id="navSheetClose" aria-label="Close menu">×</button>
+        </div>
+        <div class="nav-center">
+          <div class="nav-links" role="tablist" aria-label="Site sections">
+            <button type="button" class="nav-link active" data-nav="compounds" id="navCompounds">Compounds</button>
+            <button type="button" class="nav-link" data-nav="surgeries" id="navSurgeries">Surgeries</button>
+            <button type="button" class="nav-link" data-nav="softmax" id="navSoftmax">Forums</button>
+            <button type="button" class="nav-link" data-nav="tools" id="navTools">Tools</button>
+            <button type="button" class="nav-link" data-nav="about" id="navAbout">About</button>
+            <button type="button" class="nav-link" data-nav="contact" id="navContact">Contact</button>
+          </div>
+          <div class="nav-tagline">Education only · not medical advice</div>
+        </div>
+      </aside>
+      <button type="button" class="nav-sheet-scrim" id="navSheetScrim" tabindex="-1" aria-label="Close menu"></button>
+    </div>
+    <div class="nav-actions">
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀</button>
+      <button type="button" class="nav-bookmarks" id="navBookmarks" aria-label="Saved compounds">
+        <span class="icon" aria-hidden="true">⊡</span> <span class="nav-bookmarks-label">Saved</span>
+        <span class="bookmark-count" id="bookmarkCount">0</span>
+      </button>
+    </div>
+    </div>
+    <div class="nav-mascot" aria-hidden="true">
+      <img class="nav-mascot-img nav-mascot--lain" src="lain.png" alt="" decoding="async" />
+      <img class="nav-mascot-img nav-mascot--rey" src="rey.webp" alt="" decoding="async" />
+    </div>
+  </nav>
+
+  <!-- COMPOUNDS HOME -->
+  <div id="homeView" class="view active">
+    <div class="hero">
+      <div class="hero-label">Compound notes</div>
+      <h1 class="hero-title">Effectiveness, safety,<br/>and <em>what people claim</em></h1>
+      <p class="hero-sub">Evidence summaries, risks, studies, and community discussion in one place. Always verify with primary sources and your clinician.</p>
+
+      <div class="search-wrap">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search compounds, aliases, pathways, typos…" autocomplete="off" />
+        <span class="search-icon">⌕</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+
+      <section class="global-notes-block" aria-labelledby="globalNotesLabel">
+        <div class="section-label" id="globalNotesLabel">Your notes</div>
+        <p class="global-notes-hint">Stored locally in your browser.</p>
+        <textarea id="globalNotes" class="notes-textarea" rows="3" maxlength="20000" placeholder="Scratchpad for reminders, sources to read, questions for a clinician…"></textarea>
+      </section>
+    </div>
+
+    <section class="categories">
+      <div class="section-label">Browse by category</div>
+      <div class="category-grid">
+        <button class="cat-card" data-cat="fat-loss">
+          <div class="cat-icon">◈</div>
+          <div class="cat-name">Fat Loss</div>
+          <div class="cat-count" id="count-fat-loss">0</div>
+        </button>
+        <button class="cat-card" data-cat="cognition">
+          <div class="cat-icon">◎</div>
+          <div class="cat-name">Cognition</div>
+          <div class="cat-count" id="count-cognition">0</div>
+        </button>
+        <button class="cat-card" data-cat="skin">
+          <div class="cat-icon">◇</div>
+          <div class="cat-name">Skin Health</div>
+          <div class="cat-count" id="count-skin">0</div>
+        </button>
+        <button class="cat-card" data-cat="recovery">
+          <div class="cat-icon">◉</div>
+          <div class="cat-name">Recovery</div>
+          <div class="cat-count" id="count-recovery">0</div>
+        </button>
+        <button class="cat-card" data-cat="longevity">
+          <div class="cat-icon">⬡</div>
+          <div class="cat-name">Longevity</div>
+          <div class="cat-count" id="count-longevity">0</div>
+        </button>
+        <button class="cat-card" data-cat="performance">
+          <div class="cat-icon">△</div>
+          <div class="cat-name">Performance</div>
+          <div class="cat-count" id="count-performance">0</div>
+        </button>
+        <button class="cat-card" data-cat="inhibition-lowering">
+          <div class="cat-icon">▽</div>
+          <div class="cat-name">Inhibition-lowering</div>
+          <div class="cat-count" id="count-inhibition-lowering">0</div>
+        </button>
+      </div>
+      <p class="category-footnote">Inhibition-lowering: GABA-ergic / related compounds discussed for anxiety, spasticity, and similar contexts. <strong>Not</strong> a drinking or “stack with alcohol” section.</p>
+    </section>
+
+    <section class="compound-section">
+      <div class="compound-section-header">
+        <div class="section-label" id="listLabel">All compounds</div>
+        <button class="clear-filter" id="clearFilter" style="display:none;">✕ Clear filter</button>
+      </div>
+      <div class="compound-grid" id="compoundGrid"></div>
+    </section>
+  </div>
+
+  <!-- COMPOUND DETAIL -->
+  <div id="detailView" class="view">
+    <button class="back-btn" id="backBtn">← Back to compounds</button>
+    <div id="detailContent"></div>
+  </div>
+
+  <!-- BOOKMARKS -->
+  <div id="bookmarksView" class="view">
+    <button class="back-btn" id="backBtnBookmarks">← Back to compounds</button>
+    <div class="bookmarks-header">
+      <h2>Saved</h2>
+      <p>Saved compounds for later reading</p>
+    </div>
+    <div class="compound-grid" id="bookmarksGrid"></div>
+    <div class="empty-bookmarks" id="emptyBookmarks" style="display:none;">
+      <div class="empty-icon">⊡</div>
+      <p>No saved compounds yet. Click the bookmark icon on any compound card to save it.</p>
+    </div>
+  </div>
+
+  <!-- SURGERIES -->
+  <div id="surgeriesView" class="view">
+    <div class="hero hero--compact">
+      <div class="hero-label">Surgical atlas</div>
+      <h1 class="hero-title hero-title--sm">Facial &amp; craniofacial <em>procedures</em></h1>
+      <p class="hero-sub">Notes on facial and craniofacial procedures—helpful background for consults. Confirm everything with qualified specialists and current literature.</p>
+      <div class="search-wrap">
+        <input type="text" id="surgerySearchInput" class="search-input" placeholder="Search topics, techniques, anatomy…" autocomplete="off" />
+        <span class="search-icon">⌕</span>
+      </div>
+      <div class="surgery-filters" id="surgeryRegionFilters"></div>
+    </div>
+    <section class="compound-section">
+      <div class="compound-section-header">
+        <div class="section-label" id="surgeryListLabel">All sections</div>
+        <button class="clear-filter" id="surgeryClearType" style="display:none;">✕ Clear filters</button>
+      </div>
+      <div class="compound-grid surgery-grid" id="surgeryGrid"></div>
+    </section>
+  </div>
+
+  <div id="surgeryDetailView" class="view">
+    <button class="back-btn" id="backBtnSurgery">← Back to surgeries</button>
+    <div id="surgeryDetailContent"></div>
+  </div>
+
+  <!-- TOOLS -->
+  <div id="toolsView" class="view">
+    <div class="hero hero--compact">
+      <div class="hero-label">Utilities</div>
+      <h1 class="hero-title hero-title--sm">Tools &amp; calculators</h1>
+      <p class="hero-sub">Simple calculators for BMI, scheduling blocks, and basic dilution math. Double-check numbers against your own protocols.</p>
+    </div>
+
+    <div class="tools-grid">
+      <section class="detail-section tool-card" aria-labelledby="tool-bmi-title">
+        <div class="ds-label">Body mass index</div>
+        <div class="ds-title" id="tool-bmi-title">BMI calculator</div>
+        <p class="ds-lead">Weight in kilograms and height in centimeters.</p>
+        <div class="tool-fields">
+          <label class="tool-field"><span>Weight (kg)</span><input type="number" id="toolBmiKg" min="1" max="500" step="0.1" placeholder="e.g. 72" /></label>
+          <label class="tool-field"><span>Height (cm)</span><input type="number" id="toolBmiCm" min="50" max="280" step="0.1" placeholder="e.g. 178" /></label>
+        </div>
+        <button type="button" class="tool-run-btn" id="toolBmiRun">Calculate</button>
+        <div class="tool-out" id="toolBmiOut" role="status"></div>
+      </section>
+
+      <section class="detail-section tool-card" aria-labelledby="tool-cycle-title">
+        <div class="ds-label">Planning</div>
+        <div class="ds-title" id="tool-cycle-title">Cycle planner</div>
+        <p class="ds-lead">Phase calendar from a start date and on/off week counts.</p>
+        <div class="tool-fields">
+          <label class="tool-field"><span>Label (optional)</span><input type="text" id="toolCycleLabel" maxlength="80" placeholder="e.g. training block" /></label>
+          <label class="tool-field"><span>Start date</span><input type="date" id="toolCycleStart" /></label>
+          <label class="tool-field"><span>On (weeks)</span><input type="number" id="toolCycleOn" min="1" max="104" step="1" value="8" /></label>
+          <label class="tool-field"><span>Off (weeks)</span><input type="number" id="toolCycleOff" min="0" max="104" step="1" value="4" /></label>
+          <label class="tool-field"><span>Phases to show</span><input type="number" id="toolCyclePhases" min="1" max="12" step="1" value="4" /></label>
+        </div>
+        <button type="button" class="tool-run-btn" id="toolCycleRun">Build schedule</button>
+        <div class="tool-out tool-out--wide" id="toolCycleOut" role="status"></div>
+      </section>
+
+      <section class="detail-section tool-card" aria-labelledby="tool-recon-title">
+        <div class="ds-label">Peptides / vials</div>
+        <div class="ds-title" id="tool-recon-title">Reconstitution calculator</div>
+        <p class="ds-lead">Concentration after mixing dry mass with bacteriostatic water (or any diluent). Verify units on your vial.</p>
+        <div class="tool-fields">
+          <label class="tool-field"><span>Peptide in vial (mg)</span><input type="number" id="toolReconMg" min="0.1" max="500" step="0.1" placeholder="e.g. 5" /></label>
+          <label class="tool-field"><span>Diluent added (mL)</span><input type="number" id="toolReconMl" min="0.1" max="20" step="0.1" placeholder="e.g. 2" /></label>
+          <label class="tool-field"><span>Tick / small step (mL)</span><input type="number" id="toolReconTick" min="0.001" max="1" step="0.001" placeholder="0.1" /></label>
+          <label class="tool-field"><span>Target dose (mg) — optional</span><input type="number" id="toolReconTargetMg" min="0" max="50" step="0.001" placeholder="leave blank" /></label>
+        </div>
+        <button type="button" class="tool-run-btn" id="toolReconRun">Compute</button>
+        <div class="tool-out" id="toolReconOut" role="status"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- FORUMS (was softmax) -->
+  <div id="softmaxView" class="view">
+    <div class="hero hero--compact">
+      <div class="hero-label">Third-party boards</div>
+      <h1 class="hero-title hero-title--sm">Forums</h1>
+      <p class="hero-sub">External boards listed for convenience only—we don’t operate or endorse them.</p>
+    </div>
+
+    <p class="forum-affiliate-warning" role="note">Not affiliated with any site listed below.</p>
+
+    <section class="forums-section forums-section--minimal">
+      <div class="section-label">Looksmaxxing &amp; related</div>
+      <ul class="forum-list">
+        <li><a href="https://looksmax.org/" target="_blank" rel="noopener noreferrer">Looksmax.org</a></li>
+        <li><a href="https://forum.looksmaxxing.com/" target="_blank" rel="noopener noreferrer">Looksmaxxing Forum</a></li>
+        <li><a href="https://looksmax.cc/" target="_blank" rel="noopener noreferrer">Looksmax.cc</a></li>
+        <li><a href="https://lookism.net/" target="_blank" rel="noopener noreferrer">Lookism.net</a></li>
+        <li><a href="https://incels.is/" target="_blank" rel="noopener noreferrer">Incels.is</a></li>
+      </ul>
+    </section>
+
+    <section class="forums-section forums-section--minimal">
+      <div class="section-label">Bodybuilding &amp; fitness</div>
+      <ul class="forum-list">
+        <li><a href="https://forum.bodybuilding.com/" target="_blank" rel="noopener noreferrer">Bodybuilding.com Forums</a></li>
+        <li><a href="https://musclemecca.com/" target="_blank" rel="noopener noreferrer">MuscleMecca</a></li>
+        <li><a href="https://t-nation.com/" target="_blank" rel="noopener noreferrer">T-Nation</a></li>
+        <li><a href="https://www.elitefitness.com/forum/" target="_blank" rel="noopener noreferrer">EliteFitness.com</a></li>
+        <li><a href="https://www.tmuscle.co.uk/" target="_blank" rel="noopener noreferrer">TMuscle</a></li>
+        <li><a href="https://www.getbig.com/" target="_blank" rel="noopener noreferrer">Getbig.com</a></li>
+        <li><a href="https://www.professionalmuscle.com/" target="_blank" rel="noopener noreferrer">Professional Muscle</a></li>
+        <li><a href="https://www.intensemuscle.com/" target="_blank" rel="noopener noreferrer">IntenseMuscle.com</a></li>
+      </ul>
+    </section>
+
+    <section class="forums-section forums-section--minimal">
+      <div class="section-label">Reddit</div>
+      <ul class="forum-list">
+        <li><a href="https://www.reddit.com/r/LooksmaxingAdvice/" target="_blank" rel="noopener noreferrer">r/LooksmaxingAdvice</a></li>
+        <li><a href="https://www.reddit.com/r/bodybuilding/" target="_blank" rel="noopener noreferrer">r/bodybuilding</a></li>
+        <li><a href="https://www.reddit.com/r/naturalbodybuilding/" target="_blank" rel="noopener noreferrer">r/naturalbodybuilding</a></li>
+        <li><a href="https://www.reddit.com/r/malegrooming/" target="_blank" rel="noopener noreferrer">r/malegrooming</a></li>
+        <li><a href="https://www.reddit.com/r/RedPill/" target="_blank" rel="noopener noreferrer">r/RedPill</a></li>
+        <li><a href="https://www.reddit.com/r/PlasticSurgery/" target="_blank" rel="noopener noreferrer">r/PlasticSurgery</a></li>
+        <li><a href="https://www.reddit.com/r/SkincareAddiction/" target="_blank" rel="noopener noreferrer">r/SkincareAddiction</a></li>
+        <li><a href="https://www.reddit.com/r/orthotropics/" target="_blank" rel="noopener noreferrer">r/orthotropics</a></li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- ABOUT -->
+  <div id="aboutView" class="view">
+    <div class="hero hero--compact">
+      <div class="hero-label">Meta</div>
+      <h1 class="hero-title hero-title--sm">About us</h1>
+      <p class="hero-sub">Who we are and how this site came together.</p>
+    </div>
+
+    <div class="about-stack">
+      <section class="about-block" aria-labelledby="about-who">
+        <h2 class="about-block-title" id="about-who">Who are we? Why make all of this?</h2>
+        <p>We're just a friend group that has nothing better to do with their lives LMAO</p>
+        <blockquote class="about-quote">
+          <p>"just friends with a crazy idea" <span class="about-attribution">- Ilia</span></p>
+        </blockquote>
+        <p>At first we wanted to just buy a domain and make a website for our friend group for shits and giggles, so we started looking for domains. Since we're all losers one of the things we thought of was this niche of people. One of us came up with an idea of making this website so we made it.</p>
+        <p><strong>By no means are we professionals</strong>, and we won't be able to give you a 100% recommendation on most of the items.</p>
+      </section>
+
+      <section class="about-block" aria-labelledby="about-ai">
+        <h2 class="about-block-title" id="about-ai">Did we really make this?</h2>
+        <p><strong>Yes AND no.</strong> The main code for this website was written by AI. The design was made by me (Elhaz), the infos about the gear and pept was by Mate, and the idea to add surgeries was made by Ilia. Info and sources were of course touched up by ChatGPT.</p>
+      </section>
+
+      <section class="about-block" aria-labelledby="about-updates">
+        <h2 class="about-block-title" id="about-updates">Will we be updating the website in case anything incorrect or wrong is there?</h2>
+        <p>Yeah of course, the cycling and everything will 100% be updated in case it isn't there or anything like that. Just please let us know.</p>
+      </section>
+
+      <section class="about-block" aria-labelledby="about-money">
+        <h2 class="about-block-title" id="about-money">Are we making any money from this?</h2>
+        <p>Fuck no. This is all open source and we make 0 cents from this (although if any websites or anyone wants to hit us up and let us know, we can work something out).</p>
+        <p>If you're some shitty source from China or India please don't contact us we will not be promoting your dogshit items.</p>
+      </section>
+
+      <section class="about-block" aria-labelledby="about-source">
+        <h2 class="about-block-title" id="about-source">Will we help you with sourcing?</h2>
+        <p>Hell no 😂😂😂</p>
+      </section>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div id="contactView" class="view">
+    <div class="hero hero--compact">
+      <div class="hero-label">Contact</div>
+      <h1 class="hero-title hero-title--sm">Get in touch</h1>
+      <p class="hero-sub">Corrections, licensing, or general feedback—we’ll read it. We don’t give personal medical advice or sourcing help.</p>
+    </div>
+    <form class="contact-form" id="contactForm">
+      <label class="contact-field">
+        <span>Name</span>
+        <input type="text" name="name" id="contactName" required autocomplete="name" />
+      </label>
+      <label class="contact-field">
+        <span>Your email</span>
+        <input type="email" name="email" id="contactEmail" required autocomplete="email" />
+      </label>
+      <label class="contact-field">
+        <span>Subject</span>
+        <input type="text" name="subject" id="contactSubject" placeholder="Correction, licensing, general…" />
+      </label>
+      <label class="contact-field">
+        <span>Message</span>
+        <textarea name="message" id="contactMessage" rows="6" required placeholder="What should we know?"></textarea>
+      </label>
+      <div class="contact-status" id="contactStatus" role="status" aria-live="polite" hidden></div>
+      <button type="submit" class="contact-submit">Send message</button>
+    </form>
+  </div>
+
+  <div class="disclaimer-bar" role="note">
+    Educational reference only—not medical advice. For treatment decisions, use licensed professionals.
+  </div>
+
+  <dialog id="editRequestDialog" class="edit-request-dialog" aria-labelledby="editRequestTitle">
+    <div class="edit-request-inner">
+      <div class="edit-request-head">
+        <h2 id="editRequestTitle" class="edit-request-title">Suggest an edit</h2>
+        <button type="button" class="edit-request-close" id="editRequestClose" aria-label="Close">×</button>
+      </div>
+      <p class="edit-request-context" id="editRequestContext"></p>
+      <form id="editRequestForm" class="edit-request-form">
+        <label class="contact-field">
+          <span>Name</span>
+          <input type="text" name="name" id="erfName" required autocomplete="name" />
+        </label>
+        <label class="contact-field">
+          <span>Email</span>
+          <input type="email" name="email" id="erfEmail" required autocomplete="email" />
+        </label>
+        <label class="contact-field">
+          <span>What should change?</span>
+          <textarea name="message" id="erfMessage" rows="6" required placeholder="Describe the correction and cite a source if you can (paper, label, guideline…)."></textarea>
+        </label>
+        <input type="hidden" id="erfKind" name="page_kind" value="" />
+        <input type="hidden" id="erfId" name="page_id" value="" />
+        <input type="hidden" id="erfTitle" name="page_title" value="" />
+        <input type="hidden" id="erfUrl" name="page_url" value="" />
+        <div class="contact-status" id="erfStatus" role="status" aria-live="polite" hidden></div>
+        <button type="submit" class="contact-submit" id="erfSubmit">Send</button>
+      </form>
+    </div>
+  </dialog>
+
+  <script src="batch1.js"></script>
+  <script src="batch2.js"></script>
+  <script src="batch3.js"></script>
+  <script src="batch4.js"></script>
+  <script src="batch5.js"></script>
+  <script src="batch6.js"></script>
+  <script src="batch7.js"></script>
+  <script src="batch-inhibition.js"></script>
+  <script src="compounds_nicknames_data.js"></script>
+  <script src="hardmaxxing-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

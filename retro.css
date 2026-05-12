@@ -1,0 +1,1199 @@
+/* Slum-Board Theme: Brutalist retro imageboard */
+
+:root {
+  /* Fluid rail: shrinks / grows with viewport (desktop sidebar) */
+  --nav-w: clamp(200px, 17vw, 236px);
+  --nav-gap: 16px;
+  /* Mascot slot max height — cap the *frame* so the image can hit full rail width */
+  --mascot-h: clamp(440px, min(62dvh, 72vmin), 860px);
+}
+
+:root,
+[data-theme="dark"] {
+  --bg: #d6daf0;
+  --bg-alt: #eef2ff;
+  --panel: #f6f6f6;
+  --line: #b7c5d9;
+  --line-strong: #9fb0c6;
+  --text: #111111;
+  --text-dim: #34345c;
+  --link: #34345c;
+  --danger: #9b2d30;
+  --ok: #2f6b2f;
+}
+
+[data-theme="light"] {
+  --bg: #f0e0d6;
+  --bg-alt: #f7ece4;
+  --panel: #f6f6f6;
+  --line: #b7c5d9;
+  --line-strong: #9fb0c6;
+  --text: #111111;
+  --text-dim: #34345c;
+  --link: #34345c;
+  --danger: #9b2d30;
+  --ok: #2f6b2f;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important;
+}
+
+/* Restore list box model (reset above zeros ul padding — markers were hanging outside panels) */
+ul,
+ol {
+  margin: 0.45em 0;
+  padding-left: 1.35em;
+  list-style-position: outside;
+}
+
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+  margin: 0.25em 0;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+li {
+  display: list-item;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Tahoma, Verdana, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  padding-bottom: 48px;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(rgba(255, 255, 255, 0.035) 50%, rgba(0, 0, 0, 0.02) 50%);
+  background-size: 100% 4px;
+  z-index: 999;
+}
+
+a {
+  color: var(--link);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+img {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.nav {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--nav-w);
+  min-height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid var(--line-strong);
+  background: var(--bg-alt);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 200;
+}
+
+/* Toolbar cluster (logo, sheet, actions); mascot stays a sibling so it can scroll on mobile */
+.nav-chrome {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+.nav-logo {
+  font-family: "MS PGothic", "Courier New", monospace;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  font-weight: 700;
+  padding: 6px 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--panel);
+  text-align: left;
+  cursor: pointer;
+}
+
+.nav-tagline {
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 6px 8px;
+}
+
+.nav-center {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* Hamburger + slide sheet: mobile overlay; desktop sheet is in-flow sidebar block */
+.nav-burger {
+  display: none;
+}
+
+.nav-sheet {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+.nav-sheet-scrim {
+  display: none;
+}
+
+.nav-sheet-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+  overflow: visible;
+  max-height: none;
+}
+
+.nav-sheet-bar {
+  display: none;
+}
+
+.nav-sheet-title {
+  font-family: "MS PGothic", "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.nav-sheet-close {
+  min-width: 32px;
+  padding: 4px 8px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Sidebar mascot: Lain (light) · Rei (dark) — scales with sidebar + viewport */
+.nav-mascot {
+  flex: 1 1 0%;
+  min-height: clamp(200px, 26dvh, min(420px, var(--mascot-h)));
+  max-height: var(--mascot-h);
+  /* Bleed into nav padding so art lines up snug with the rail edges */
+  width: calc(100% + 20px);
+  margin-left: -10px;
+  margin-right: -10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  pointer-events: none;
+  user-select: none;
+  border-top: 1px dotted var(--line-strong);
+  padding-top: 4px;
+  overflow: hidden;
+}
+
+.nav-mascot-img {
+  display: none;
+  width: 100%;
+  flex: 1 1 0%;
+  min-height: 0;
+  max-height: none;
+  height: auto;
+  object-fit: contain;
+  object-position: bottom center;
+  image-rendering: auto;
+  filter: contrast(1.02) saturate(0.95) drop-shadow(0 0 1px rgba(0, 0, 0, 0.22));
+}
+
+[data-theme="light"] .nav-mascot--lain {
+  display: block;
+}
+
+[data-theme="dark"] .nav-mascot--rey {
+  display: block;
+}
+
+.view {
+  display: none;
+  margin-left: calc(var(--nav-w) + var(--nav-gap));
+  padding: 12px 12px 60px;
+}
+
+.view.active {
+  display: block;
+}
+
+.about-stack {
+  max-width: 720px;
+}
+
+.about-block {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.about-block-title {
+  font-family: "MS PGothic", "Courier New", monospace;
+  font-size: 16px;
+  color: var(--text);
+  margin: 0 0 10px;
+  line-height: 1.2;
+}
+
+.about-block p {
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+
+.about-block p:last-child {
+  margin-bottom: 0;
+}
+
+.about-quote {
+  margin: 10px 0 12px;
+  padding: 8px 10px 8px 12px;
+  border-left: 3px solid var(--line-strong);
+  background: var(--bg-alt);
+}
+
+.about-quote p {
+  margin: 0;
+  font-style: italic;
+}
+
+.about-attribution {
+  font-style: normal;
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.hero,
+.categories,
+.compound-section,
+.bookmarks-header,
+.detail-hero,
+.detail-section,
+.forums-section,
+.contact-form {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.hero-label,
+.section-label,
+.ds-label {
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.hero-title,
+.detail-name,
+.ds-title,
+.forums-title,
+.bookmarks-header h2 {
+  font-family: "MS PGothic", "Courier New", monospace;
+  font-size: 21px;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.hero-sub,
+.ds-lead,
+.bookmarks-header p,
+.forums-lead,
+.softmax-lead {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+input,
+textarea,
+select,
+.search-input {
+  width: 100%;
+  background: #ffffff;
+  color: var(--text);
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  font-family: Tahoma, Verdana, Arial, sans-serif;
+  font-size: 13px;
+  padding: 6px 7px;
+  outline: none;
+}
+
+.search-wrap {
+  position: relative;
+  max-width: 540px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  pointer-events: none;
+}
+
+.search-results {
+  display: none;
+  border: 1px solid var(--line-strong);
+  background: var(--panel);
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.search-results.open {
+  display: block;
+}
+
+.search-result-item {
+  border-top: 1px solid var(--line);
+  padding: 7px 8px;
+  cursor: pointer;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 6px;
+}
+
+.compound-grid,
+.softmax-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.compound-card,
+.cat-card,
+.softmax-card,
+.study-card,
+.legal-item,
+.misconception-item,
+.community-box,
+.cycling-box,
+.guide-block,
+.hardmax-thumb--hero {
+  border: 1px solid var(--line);
+  background: #f6f6f6;
+}
+
+.compound-card,
+.softmax-card,
+.study-card,
+.cat-card {
+  padding: 8px;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.card-name {
+  font-family: "MS PGothic", "Courier New", monospace;
+  font-size: 14px;
+}
+
+.card-tags,
+.detail-header-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.tag {
+  border: 1px solid var(--line-strong);
+  background: #ebeff7;
+  color: var(--text-dim);
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  padding: 1px 4px;
+}
+
+.card-mechanism,
+.summary-card-body,
+.ds-body,
+.community-box p,
+.cycling-box p,
+.forum-cycle-note,
+.forum-cycle-list li,
+.study-summary,
+.softmax-list,
+.guide-article,
+.forum-list li,
+.contact-status {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.forum-cycle-suggestions {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dotted var(--line-strong);
+}
+
+.forum-cycle-label {
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.forum-cycle-list {
+  margin: 0 0 6px;
+  padding-left: 1.25em;
+  list-style-type: disc;
+}
+
+.forum-cycle-meta {
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.forum-cycle-note {
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+
+.forum-affiliate-warning {
+  border: 2px solid var(--danger);
+  background: #f8e8e8;
+  color: var(--text);
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+[data-theme="dark"] .forum-affiliate-warning {
+  background: #2a1a1c;
+  color: #f0e8e8;
+  border-color: #c44;
+}
+
+.forums-section--minimal {
+  margin-bottom: 8px;
+}
+
+.forums-section--minimal .forum-list {
+  margin-top: 6px;
+}
+
+.summary-grid,
+.pros-cons-grid,
+.legal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 6px;
+}
+
+.summary-card {
+  border: 1px solid var(--line);
+  background: #f8f8f8;
+  padding: 8px;
+}
+
+.summary-card-title,
+.pros-cons-heading {
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.detail-sections {
+  display: grid;
+  gap: 8px;
+}
+
+.detail-section {
+  padding: 10px;
+}
+
+.guide-subh {
+  font-family: "MS PGothic", "Courier New", monospace;
+  font-size: 14px;
+  border-bottom: 1px solid var(--line);
+  margin: 10px 0 6px;
+}
+
+.guide-kv {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 6px;
+  border-bottom: 1px dotted var(--line);
+  padding: 4px 0;
+}
+
+.guide-k {
+  font-family: "Courier New", monospace;
+  color: var(--text-dim);
+  font-size: 10px;
+}
+
+.hardmax-thumb {
+  border: 1px solid var(--line);
+  background: #eaedf7;
+  margin: -8px -8px 8px;
+  padding: 6px;
+  text-align: center;
+}
+
+button,
+.clear-filter,
+.back-btn,
+.theme-toggle,
+.nav-bookmarks,
+.nav-link,
+.contact-submit,
+.surgery-chip,
+.bookmark-btn {
+  background: #c0c0c0;
+  color: #111111;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #808080 !important;
+  border-bottom: 2px solid #808080 !important;
+  font-family: Tahoma, Verdana, Arial, sans-serif;
+  font-size: 12px;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+button:active,
+.clear-filter:active,
+.back-btn:active,
+.theme-toggle:active,
+.nav-bookmarks:active,
+.nav-link:active,
+.contact-submit:active,
+.surgery-chip:active,
+.bookmark-btn:active {
+  border-top: 2px solid #808080 !important;
+  border-left: 2px solid #808080 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+}
+
+.contact-form {
+  max-width: 620px;
+  display: grid;
+  gap: 8px;
+}
+
+.contact-status {
+  border: 1px solid var(--line);
+  background: #f8f8f8;
+  padding: 6px 8px;
+}
+
+.contact-status--ok {
+  color: var(--ok);
+}
+
+.contact-status--error {
+  color: var(--danger);
+}
+
+.surgery-filters {
+  margin-top: 10px;
+}
+
+.surgery-filter-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.surgery-filter-label {
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  min-width: 40px;
+  color: var(--text-dim);
+}
+
+.surgery-chips {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.disclaimer-bar {
+  position: fixed;
+  bottom: 0;
+  left: var(--nav-w);
+  right: 0;
+  background: var(--bg-alt);
+  border-top: 1px solid var(--line-strong);
+  padding: 7px 10px;
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  z-index: 180;
+}
+
+body.nav-sheet-open {
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  :root {
+    /* Scrolls with page — keep a bit shorter so content shows sooner */
+    --mascot-mobile-max: min(280px, 38dvh);
+  }
+
+  html {
+    scroll-padding-top: calc(48px + env(safe-area-inset-top, 0px));
+  }
+
+  /* Only the chrome row is sticky; mascot is normal flow so it scrolls away */
+  .nav {
+    position: static;
+    width: 100%;
+    max-width: 100vw;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    border-right: 0;
+    border-bottom: none;
+    overflow: visible;
+    background: transparent;
+  }
+
+  .nav-chrome {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    grid-template-areas: "brand burger tools";
+    gap: 6px 8px;
+    align-items: center;
+    width: 100%;
+    padding: 6px 8px;
+    padding-top: max(6px, env(safe-area-inset-top, 0px));
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .nav-logo {
+    grid-area: brand;
+    justify-self: start;
+    min-width: 0;
+    font-size: 13px;
+    padding: 5px 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-burger {
+    grid-area: burger;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 32px;
+    padding: 0;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .nav-actions {
+    grid-area: tools;
+    justify-self: end;
+    justify-content: flex-end;
+    width: auto;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .theme-toggle,
+  .nav-bookmarks {
+    padding: 5px 7px;
+    font-size: 11px;
+  }
+
+  .nav-bookmarks-label {
+    display: none;
+  }
+
+  .nav-bookmarks .bookmark-count {
+    margin-left: 2px;
+  }
+
+  /* Full-screen overlay; panel does not consume grid space */
+  .nav-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 260;
+    flex-direction: row;
+    align-items: stretch;
+    flex: none;
+    min-height: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .nav-sheet.is-open {
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .nav-sheet-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: min(86vw, 288px);
+    flex: 0 0 auto;
+    max-height: 100%;
+    padding: 12px 12px 20px;
+    background: var(--bg-alt);
+    border-right: 1px solid var(--line-strong);
+    box-shadow: 6px 0 20px rgba(0, 0, 0, 0.14);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(-105%);
+    transition: transform 0.22s ease;
+  }
+
+  .nav-sheet.is-open .nav-sheet-panel {
+    transform: translateX(0);
+  }
+
+  .nav-sheet-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 2px;
+    border-bottom: 1px dotted var(--line-strong);
+  }
+
+  .nav-sheet-scrim {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    background: rgba(17, 17, 28, 0.45);
+    opacity: 0;
+    transition: opacity 0.22s ease;
+  }
+
+  [data-theme="light"] .nav-sheet-scrim {
+    background: rgba(72, 62, 54, 0.38);
+  }
+
+  .nav-sheet.is-open .nav-sheet-scrim {
+    opacity: 1;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .nav-link {
+    width: 100%;
+    text-align: left;
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+
+  .nav-tagline {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 10px;
+    line-height: 1.35;
+    white-space: normal;
+  }
+
+  .nav-mascot {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    align-self: stretch;
+    min-height: 0;
+    max-height: var(--mascot-mobile-max);
+    width: 100%;
+    margin: 0;
+    padding: 8px 8px 4px;
+    border-top: none;
+    background: var(--bg-alt);
+    overflow: hidden;
+  }
+
+  .view {
+    margin-left: 0;
+    padding: 10px 8px 70px;
+  }
+
+  .disclaimer-bar {
+    left: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .compound-grid,
+  .softmax-grid,
+  .summary-grid,
+  .pros-cons-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-kv {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Notes, tools, dosing row, inhibition category, search-as-button */
+.global-notes-block {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dotted var(--line-strong);
+}
+
+.global-notes-hint {
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.notes-textarea {
+  width: 100%;
+  min-height: 72px;
+  padding: 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--panel);
+  color: var(--text);
+  font-family: Tahoma, Verdana, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.category-footnote {
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 8px;
+  line-height: 1.35;
+  max-width: 52rem;
+}
+
+.card-summary {
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--text-dim);
+}
+
+.search-result-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border-top: 1px solid var(--line);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  padding: 7px 8px;
+  cursor: pointer;
+  background: var(--panel);
+  font: inherit;
+  color: inherit;
+}
+
+.search-result-item:hover {
+  background: #ebeff7;
+}
+
+.detail-hero-actions {
+  margin-top: 10px;
+}
+
+.detail-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-action-row .tool-run-btn {
+  margin-top: 0;
+}
+
+.detail-left .detail-action-row .tool-run-btn {
+  flex: 0 0 auto;
+  min-height: 30px;
+}
+
+.edit-request-dialog {
+  padding: 0;
+  border: 2px solid var(--line-strong);
+  background: var(--panel);
+  color: var(--text);
+  max-width: 520px;
+  width: calc(100vw - 28px);
+}
+
+.edit-request-dialog::backdrop {
+  background: rgba(17, 17, 28, 0.42);
+}
+
+[data-theme="light"] .edit-request-dialog::backdrop {
+  background: rgba(72, 62, 54, 0.35);
+}
+
+.edit-request-inner {
+  padding: 12px;
+}
+
+.edit-request-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.edit-request-title {
+  font-family: "MS PGothic", "Courier New", monospace;
+  font-size: 17px;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.edit-request-close {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.edit-request-context {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+.edit-request-form {
+  display: grid;
+  gap: 8px;
+}
+
+.ds-title--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dosing-edit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.request-edit-link {
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.dosing-summary,
+.dosing-routes {
+  font-size: 12px;
+  line-height: 1.45;
+  margin-top: 8px;
+}
+
+.dosing-routes-k {
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.dosing-calc-btn {
+  margin-top: 10px;
+}
+
+.dosing-section {
+  background: #f0f2fa;
+}
+
+[data-theme="light"] .dosing-section {
+  background: #faf6f2;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.tool-card .tool-fields {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.tool-field {
+  display: grid;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.tool-field span:first-child {
+  font-family: "Courier New", monospace;
+  color: var(--text-dim);
+  font-size: 10px;
+}
+
+.tool-field input {
+  padding: 6px 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+}
+
+.tool-run-btn {
+  margin-top: 4px;
+}
+
+.tool-out {
+  margin-top: 10px;
+  padding: 8px;
+  border: 1px dotted var(--line-strong);
+  background: #fafafa;
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  white-space: pre-wrap;
+  line-height: 1.4;
+}
+
+.tool-out--wide {
+  max-height: 320px;
+  overflow: auto;
+}
+
+.tool-table-wrap {
+  overflow-x: auto;
+}
+
+.tool-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.tool-table caption {
+  text-align: left;
+  font-weight: 700;
+  padding-bottom: 6px;
+}
+
+.tool-table th,
+.tool-table td {
+  border: 1px solid var(--line);
+  padding: 4px 6px;
+  text-align: left;
+}
+
+.tool-fineprint {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--text-dim);
+}
