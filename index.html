@@ -29,6 +29,7 @@
             <button type="button" class="nav-link" data-nav="surgeries" id="navSurgeries">Surgeries</button>
             <button type="button" class="nav-link" data-nav="softmax" id="navSoftmax">Forums</button>
             <button type="button" class="nav-link" data-nav="tools" id="navTools">Tools</button>
+            <button type="button" class="nav-link" data-nav="changelog" id="navChangelog">Changelog</button>
             <button type="button" class="nav-link" data-nav="about" id="navAbout">About</button>
             <button type="button" class="nav-link" data-nav="contact" id="navContact">Contact</button>
           </div>
@@ -218,6 +219,37 @@
         <div class="tool-out" id="toolReconOut" role="status"></div>
       </section>
     </div>
+  </div>
+
+  <!-- CHANGELOG -->
+  <div id="changelogView" class="view">
+    <div class="hero hero--compact">
+      <div class="hero-label">Project</div>
+      <h1 class="hero-title hero-title--sm">Changelog</h1>
+      <p class="hero-sub changelog-mini">Small update notes, newest first.</p>
+    </div>
+
+    <section class="detail-section changelog-mini">
+      <div class="ds-label">Latest</div>
+      <div class="ds-title">Current release</div>
+      <ul class="forum-list">
+        <li>Deep links for compounds and surgeries.</li>
+        <li>Improved search with nickname and typo matching.</li>
+        <li>New inhibition-lowering category and entries.</li>
+        <li>Tools page (BMI, cycle planner, reconstitution).</li>
+        <li>Per-page edit requests via Web3Forms dialog.</li>
+      </ul>
+    </section>
+
+    <section class="detail-section changelog-mini">
+      <div class="ds-label">Previous</div>
+      <div class="ds-title">Earlier updates</div>
+      <ul class="forum-list">
+        <li>Saved global and per-compound notes in localStorage.</li>
+        <li>Card front summaries refactor with cleaner copy.</li>
+        <li>Navigation and URL cleanup when leaving detail pages.</li>
+      </ul>
+    </section>
   </div>
 
   <!-- FORUMS (was softmax) -->

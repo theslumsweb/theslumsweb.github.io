@@ -1250,6 +1250,14 @@ function initSiteNav() {
     showView("toolsView");
   });
 
+  document.getElementById("navChangelog")?.addEventListener("click", () => {
+    lastOpenedCompoundId = null;
+    lastOpenedSurgeryId = null;
+    clearAppUrlToNormal();
+    setNavSection("changelog");
+    showView("changelogView");
+  });
+
   document.getElementById("navAbout").addEventListener("click", () => {
     lastOpenedCompoundId = null;
     lastOpenedSurgeryId = null;
