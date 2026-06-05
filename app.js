@@ -14,6 +14,7 @@ const COMPOUNDS = [
   ...NEW_COMPOUNDS_5,
   ...NEW_COMPOUNDS_6,
   ...NEW_COMPOUNDS_7,
+  ...NEW_COMPOUNDS_8,
   ...(typeof NEW_COMPOUNDS_INHIBITION !== "undefined" && Array.isArray(NEW_COMPOUNDS_INHIBITION) ? NEW_COMPOUNDS_INHIBITION : []),
 ];
 
@@ -246,6 +247,54 @@ function deriveCommunity(c) {
 
 const GLP_CYCLING =
   "GLP-1 therapies for diabetes or obesity are usually long-term care with prescriber-led titration, not informal “cycling.” Pausing or changing dose should be a medical decision.";
+
+let activePathwayFilter = null;
+let surgeonSearchQuery = "";
+let activeSurgeonRegionFilter = null;
+let surgeryPathFilter = null;
+
+const INTERACTIONS = {
+  "mk677|sermorelin": {
+    severity: "info",
+    note: "Additive GH secretion may amplify IGF-1 and blood glucose changes. Monitor fasting glucose and appetite when combining these secretagogues."
+  },
+  "finasteride|dutasteride": {
+    severity: "warn",
+    note: "Both inhibit 5α-reductase. Combining them increases risk of sexual side effects without clear additional androgenic benefit."
+  },
+  "dnp|t3": {
+    severity: "danger",
+    note: "DANGEROUS: Combining a mitochondrial uncoupler with thyroid hormone analogs can cause uncontrollable thermogenesis and risk of fatal hyperthermia."
+  },
+  "semaglutide|tirzepatide": {
+    severity: "warn",
+    note: "Do not combine two GLP-1 receptor agonists. Efficacy does not meaningfully increase while GI side-effect burden doubles."
+  },
+  "dnp|clenbuterol": {
+    severity: "danger",
+    note: "Both dramatically raise metabolic rate and cardiovascular strain. This stack is associated with dangerous hyperthermia and cardiac risk."
+  },
+  "testosterone|nandrolone": {
+    severity: "info",
+    note: "Multiple androgens increase aromatization and estrogenic modulation risk; monitor lipids, blood pressure, and estrogen symptoms."
+  },
+  "finasteride|dutasteride|spironolactone": {
+    severity: "warn",
+    note: "Multiple anti-androgens can compound libido and hormonal side effects. Use only under clinician supervision."
+  }
+};
+
+const COMMON_PATHWAY_TAGS = ["IGF-1 ↑", "mTORC1 ↑", "Androgen Receptor", "GLP-1 ↑", "AMPK ↑", "11β-HSD1 ↓", "Collagen I ↑", "5-HT2A"];
+
+function normalizePathwayTag(text) {
+  return String(text || "").trim().toLowerCase();
+}
+
+function buildPathwaySearchText(c) {
+  return (c.pathways || [])
+    .map((p) => `${p.tag} ${p.system} ${p.note}`)
+    .join(" ");
+}
 
 function deriveCycling(c) {
   const blob = `${c.name} ${(c.categories || []).join(" ")} ${c.classification || ""}`.toLowerCase();
@@ -728,6 +777,7 @@ function buildCompoundSearchBlob(c) {
   const fx = (c.effects || []).join(" ");
   const se = (c.sideEffects || []).join(" ");
   const what = (c.whatItIs || "").slice(0, 400);
+  const pathways = buildPathwaySearchText(c);
   const bits = [
     c.name,
     ...(c.aliases || []),
@@ -737,6 +787,7 @@ function buildCompoundSearchBlob(c) {
     fx,
     se,
     what,
+    pathways,
     deriveCardFrontSummary(c),
   ];
   return bits.join(" ").toLowerCase();
@@ -876,7 +927,21 @@ function resolveDeepLinkFromLocation() {
     if (COMPOUNDS.some((c) => c.id === h)) return { type: "compound", id: h };
     if (HARDMAXXING_LIST.some((s) => s.id === h)) return { type: "surgery", id: h };
   }
-  const parts = location.pathname.split("/").filter(Boolean);
+
+  const parts = location.pathname.split("/").filter(Boolean).map((p) => p.trim().toLowerCase());
+  if (parts[0] === "surgeons" && parts[1]) {
+    return { type: "surgeon", id: parts[1] };
+  }
+  if (parts[0] === "tools" && parts[1] === "stack-builder") {
+    return { type: "tools", section: "stack-builder" };
+  }
+  if (parts[0] === "compounds" && parts[1]) {
+    return { type: "compound", id: parts[1] };
+  }
+  if (parts[0] === "surgeries" && parts[1]) {
+    return { type: "surgery", id: parts[1] };
+  }
+
   const last = (parts[parts.length - 1] || "").trim().toLowerCase();
   if (last && last !== "index.html") {
     if (COMPOUNDS.some((c) => c.id === last)) return { type: "compound", id: last };
@@ -919,8 +984,23 @@ function applyInitialDeepLink() {
   const hit = resolveDeepLinkFromLocation();
   if (!hit) return;
   queueMicrotask(() => {
-    if (hit.type === "compound") openCompound(hit.id, { skipHash: true });
-    else openHardmaxSection(hit.id, { skipHash: true });
+    if (hit.type === "compound") {
+      openCompound(hit.id, { skipHash: true });
+      if (new URLSearchParams(location.search).has("pathway")) {
+        highlightPathwayFromQuery();
+      }
+    } else if (hit.type === "surgery") {
+      openHardmaxSection(hit.id, { skipHash: true });
+    } else if (hit.type === "surgeon") {
+      openSurgeon(hit.id, { skipHash: true });
+    } else if (hit.type === "tools") {
+      setNavSection("tools");
+      showView("toolsView");
+      if (hit.section === "stack-builder") {
+        document.getElementById("toolStackInput")?.focus();
+        document.getElementById("tool-stack-title")?.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   });
 }
 
@@ -1037,6 +1117,148 @@ function initToolsPanel() {
     lines.push("Sterility and clinical suitability are not assessed here.");
     reconOut.textContent = lines.join("\n");
   });
+
+  const metricOut = document.getElementById("toolMetricOut");
+  document.getElementById("toolMetricRun")?.addEventListener("click", () => {
+    const width = parseFloat(document.getElementById("toolFaceWidth").value);
+    const upper = parseFloat(document.getElementById("toolUpperFace").value);
+    const lower = parseFloat(document.getElementById("toolLowerFace").value);
+    const bigonial = parseFloat(document.getElementById("toolBigonialWidth").value);
+    const bizy = parseFloat(document.getElementById("toolBizygomaticWidth").value);
+    const chin = parseFloat(document.getElementById("toolChinHeight").value);
+    if (![width, upper, lower, bigonial, bizy, chin].every((n) => n > 0)) {
+      metricOut.textContent = "Enter all facial dimensions in millimeters.";
+      return;
+    }
+    const totalHeight = upper + lower;
+    const widthHeightRatio = width / totalHeight;
+    const jawCheekRatio = bigonial / bizy;
+    const chinLowerRatio = chin / lower;
+    const notes = [];
+    if (widthHeightRatio < 0.85) notes.push("Facial width is relatively narrow for the measured face height; midface support or cheek augmentation may improve proportion.");
+    else if (widthHeightRatio > 1.05) notes.push("Facial width is relatively broad; zygomatic narrowing or jaw contouring may help balance proportions.");
+    else notes.push("Width-to-height proportions are in a common range.");
+    if (jawCheekRatio < 0.84) notes.push("Lower face appears narrower than cheek width; jaw angle augmentation or mandibular widening may be considered.");
+    else if (jawCheekRatio > 1.05) notes.push("Lower face appears wider than cheek width; masseter reduction or mandibular contouring may help.");
+    else notes.push("Lower-face width is balanced with cheek width.");
+    if (chinLowerRatio < 0.38) notes.push("Chin height is shorter relative to the lower face; genioplasty or chin implants may address this.");
+    else if (chinLowerRatio > 0.52) notes.push("Chin height is long relative to the lower face; lower-face shortening or soft-tissue refinement may be indicated.");
+    else notes.push("Chin height is in a common proportion range.");
+    metricOut.innerHTML = `<div class="tool-table-wrap"><table class="tool-table"><caption>Facial metric summary</caption><tbody><tr><th>Width / height</th><td>${widthHeightRatio.toFixed(2)}</td></tr><tr><th>Jaw / cheek</th><td>${jawCheekRatio.toFixed(2)}</td></tr><tr><th>Chin / lower face</th><td>${chinLowerRatio.toFixed(2)}</td></tr></tbody></table></div><div class="tool-notes">${notes.map((line) => `<p>${escapeHtml(line)}</p>`).join("")}</div><p class="tool-fineprint">This is a simple proportion checker, not a surgical plan. See a qualified specialist for evaluation.</p>`;
+  });
+
+  const stackOut = document.getElementById("toolStackOut");
+  const stackInput = document.getElementById("toolStackInput");
+  const stackList = document.getElementById("toolStackList");
+  const toolStackItems = [];
+  const interactionDefinitions = Object.entries(INTERACTIONS).map(([key, value]) => ({ keys: key.split("|"), ...value }));
+  if (stackList) {
+    stackList.innerHTML = COMPOUNDS.map((c) => `<option value="${escapeAttr(c.name)}"></option>`).join("");
+  }
+  function findCompoundByQuery(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return null;
+    const exact = COMPOUNDS.find((c) => c.id === q || c.name.toLowerCase() === q || (c.aliases || []).some((a) => a.toLowerCase() === q));
+    if (exact) return exact;
+    return COMPOUNDS.find((c) => c.name.toLowerCase().includes(q) || c.id.includes(q) || (c.aliases || []).some((a) => a.toLowerCase().includes(q)));
+  }
+  function formatCompoundsInStack() {
+    if (!toolStackItems.length) return "<div class=\"empty-panel\">Stack is empty.</div>";
+    const rows = toolStackItems
+      .map((c, i) => `<tr><td>${i + 1}</td><td>${escapeHtml(c.name)}</td><td>${escapeHtml((c.categories || []).join(", ")) || "Unknown"}</td></tr>`)
+      .join("");
+    const interactions = interactionDefinitions.filter((def) => def.keys.every((k) => toolStackItems.some((item) => item.id === k)));
+    const interactionHtml = interactions.length
+      ? `<div class="tool-notes"><strong>Known interactions</strong>${interactions
+          .map(
+            (def) => `<p>${escapeHtml(def.severity.toUpperCase())}: ${escapeHtml(def.note)}</p>`
+          )
+          .join("")}</div>`
+      : `<div class="tool-notes"><p>No flagged interactions found for the selected stack.</p></div>`;
+    return `<div class="tool-table-wrap"><table class="tool-table"><caption>Selected compounds</caption><thead><tr><th>#</th><th>Compound</th><th>Category</th></tr></thead><tbody>${rows}</tbody></table></div>${interactionHtml}`;
+  }
+  document.getElementById("toolStackAdd")?.addEventListener("click", () => {
+    const raw = stackInput?.value || "";
+    const compound = findCompoundByQuery(raw);
+    if (!compound) {
+      stackOut.textContent = `No compound found for "${raw.trim()}".`;
+      return;
+    }
+    if (toolStackItems.some((item) => item.id === compound.id)) {
+      stackOut.textContent = `${compound.name} is already in the stack.`;
+      return;
+    }
+    toolStackItems.push(compound);
+    if (stackInput) stackInput.value = "";
+    stackOut.innerHTML = formatCompoundsInStack();
+  });
+
+  const unitOut = document.getElementById("toolUnitOut");
+  const unitMap = {
+    generic: { mw: null, iuMg: null },
+    "bpc-157": { mw: 1419.5, iuMg: null },
+    "tb-500": { mw: 4963, iuMg: null },
+    gh: { mw: 22000, iuMg: 0.333 },
+    insulin: { mw: 5808, iuMg: 0.0347 },
+  };
+  function formatNumber(value) {
+    return Number.isFinite(value) ? `${Math.round(value * 100000) / 100000}` : "n/a";
+  }
+  function mgFrom(amount, unit, meta) {
+    switch (unit) {
+      case "mg":
+        return amount;
+      case "mcg":
+        return amount / 1000;
+      case "nmol":
+        return meta?.mw ? (amount * meta.mw) / 1e6 : null;
+      case "pmol":
+        return meta?.mw ? (amount * meta.mw) / 1e9 : null;
+      case "iu":
+        return meta?.iuMg ? amount * meta.iuMg : null;
+      default:
+        return null;
+    }
+  }
+  function convertFromMg(mg, unit, meta) {
+    switch (unit) {
+      case "mg":
+        return mg;
+      case "mcg":
+        return mg * 1000;
+      case "nmol":
+        return meta?.mw ? (mg * 1e6) / meta.mw : null;
+      case "pmol":
+        return meta?.mw ? (mg * 1e9) / meta.mw : null;
+      case "iu":
+        return meta?.iuMg ? mg / meta.iuMg : null;
+      default:
+        return null;
+    }
+  }
+  document.getElementById("toolUnitRun")?.addEventListener("click", () => {
+    const amount = parseFloat(document.getElementById("toolUnitValue").value);
+    const fromUnit = document.getElementById("toolUnitFrom").value;
+    const toUnit = document.getElementById("toolUnitTo").value;
+    const compoundId = document.getElementById("toolUnitCompound").value;
+    if (!amount || amount < 0) {
+      unitOut.textContent = "Enter an amount to convert.";
+      return;
+    }
+    const meta = unitMap[compoundId] || unitMap.generic;
+    const mgValue = mgFrom(amount, fromUnit, meta);
+    if (mgValue === null) {
+      unitOut.textContent = `Conversion not available for ${fromUnit} with ${compoundId === "generic" ? "generic compound" : compoundId}.`;
+      return;
+    }
+    const converted = convertFromMg(mgValue, toUnit, meta);
+    if (converted === null) {
+      unitOut.textContent = `Conversion not available for ${toUnit} with ${compoundId === "generic" ? "generic compound" : compoundId}.`;
+      return;
+    }
+    const note = compoundId === "generic" ? "" : " (approximate, depends on compound molecular weight/reference equivalence).";
+    unitOut.textContent = `${amount} ${fromUnit} ≈ ${formatNumber(converted)} ${toUnit}${note}`;
+  });
 }
 
 function wireCompoundDetailPage(c) {
@@ -1073,6 +1295,22 @@ function wireCompoundDetailPage(c) {
     if (d && d.diluentMl != null) document.getElementById("toolReconMl").value = String(d.diluentMl);
     if (d && d.tickMl != null) document.getElementById("toolReconTick").value = String(d.tickMl);
   });
+  document.querySelectorAll(".pathway-tag").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const pathway = btn.dataset.pathway;
+      if (!pathway) return;
+      clearFilter();
+      activePathwayFilter = pathway;
+      const chips = document.querySelectorAll(".pathway-chip");
+      chips.forEach((c) => c.classList.toggle("active", c.dataset.pathway === pathway));
+      const filtered = COMPOUNDS.filter((comp) => (comp.pathways || []).some((p) => normalizePathwayTag(p.tag) === normalizePathwayTag(pathway)));
+      renderCompoundGrid(filtered);
+      document.getElementById("listLabel").textContent = `${pathway} (${filtered.length})`;
+      document.getElementById("clearFilter").style.display = "flex";
+      setNavSection("compounds");
+      showView("homeView");
+    });
+  });
 }
 
 function wireSurgeryDetailPage(s) {
@@ -1092,6 +1330,12 @@ function wireSurgeryDetailPage(s) {
       window.prompt("Copy link:", url);
     }
   });
+  document.querySelectorAll(".surgeon-chip").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const sid = btn.dataset.surgeonId;
+      if (sid) openSurgeon(sid);
+    });
+  });
 }
 
 // ──────────────────────────────────────
@@ -1100,23 +1344,58 @@ function wireSurgeryDetailPage(s) {
 document.addEventListener("DOMContentLoaded", () => {
   applyNicknamesFromBundledText();
   rebuildCompoundSearchIndex();
+  normalizeCompoundCategories();
   initTheme();
   updateBookmarkCount();
   renderCategoryCounts();
   renderCompoundGrid(COMPOUNDS);
   initSearch();
   initCategoryFilters();
+  initPathwayFilters();
   initNav();
   initSiteNav();
   initMobileNavSheet();
   initSurgeries();
+  initSurgeonsView();
   initContactForm();
   initGlobalNotesField();
   initDeepLinking();
   initToolsPanel();
   initEditRequestDialog();
   applyInitialDeepLink();
+  updateTopCounters();
 });
+
+// Ensure every compound has normalized category keys and derive missing top-level buckets
+function normalizeCompoundCategories() {
+  if (!Array.isArray(COMPOUNDS)) return;
+  for (const c of COMPOUNDS) {
+    c.categories = Array.isArray(c.categories) ? c.categories : [];
+    const ctx = `${(c.categories || []).join(' ')} ${c.classification || ''} ${c.name || ''}`.toLowerCase();
+    if (ctx.includes('peptide') || ctx.includes('fragment') || ctx.includes('tb-') || ctx.includes('bpc-')) {
+      if (!c.categories.includes('peptides')) c.categories.push('peptides');
+    }
+    if (ctx.includes('steroid') || ctx.includes('androgen') || ctx.includes('hormone')) {
+      if (!c.categories.includes('hormones')) c.categories.push('hormones');
+    }
+    if (ctx.includes('skin') || ctx.includes('derm') || ctx.includes('acne') || ctx.includes('looks') || ctx.includes('cosmetic')) {
+      if (!c.categories.includes('looks')) c.categories.push('looks');
+      if (!c.categories.includes('skin')) c.categories.push('skin');
+    }
+    if (ctx.includes('hair') || ctx.includes('alopecia')) {
+      if (!c.categories.includes('hair')) c.categories.push('hair');
+    }
+  }
+}
+
+function updateTopCounters() {
+  const compEl = document.getElementById('topCompoundCount');
+  const surgEl = document.getElementById('topSurgeryCount');
+  const surgEl2 = document.getElementById('topSurgeonCount');
+  if (compEl && Array.isArray(COMPOUNDS)) compEl.textContent = String(COMPOUNDS.length);
+  if (surgEl && typeof HARDMAXXING_LIST !== 'undefined' && Array.isArray(HARDMAXXING_LIST)) surgEl.textContent = String(HARDMAXXING_LIST.length);
+  if (surgEl2 && typeof SURGEONS_DATA !== 'undefined' && Array.isArray(SURGEONS_DATA)) surgEl2.textContent = String(SURGEONS_DATA.length);
+}
 
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY);
@@ -1234,6 +1513,15 @@ function initSiteNav() {
     renderSurgeryGrid();
   });
 
+  document.getElementById("navSurgeons").addEventListener("click", () => {
+    lastOpenedCompoundId = null;
+    lastOpenedSurgeryId = null;
+    clearAppUrlToNormal();
+    setNavSection("surgeons");
+    showView("surgeonsView");
+    renderSurgeonGrid();
+  });
+
   document.getElementById("navSoftmax").addEventListener("click", () => {
     lastOpenedCompoundId = null;
     lastOpenedSurgeryId = null;
@@ -1307,6 +1595,11 @@ function initNav() {
     setNavSection("surgeries");
     showView("surgeriesView");
   });
+  document.getElementById("backBtnSurgeon").addEventListener("click", () => {
+    clearAppUrlToNormal();
+    setNavSection("surgeons");
+    showView("surgeonsView");
+  });
 }
 
 // ──────────────────────────────────────
@@ -1372,7 +1665,9 @@ function initCategoryFilters() {
         clearFilter();
       } else {
         activeCategory = cat;
+        activePathwayFilter = null;
         document.querySelectorAll(".cat-card").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".pathway-chip").forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
         const filtered = COMPOUNDS.filter((c) => c.categories.includes(cat));
         renderCompoundGrid(filtered);
@@ -1385,9 +1680,34 @@ function initCategoryFilters() {
   document.getElementById("clearFilter").addEventListener("click", clearFilter);
 }
 
+function initPathwayFilters() {
+  const wrap = document.getElementById("pathwayFilterChips");
+  if (!wrap) return;
+  wrap.querySelectorAll(".pathway-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const tag = chip.dataset.pathway;
+      if (activePathwayFilter === tag) {
+        clearFilter();
+        return;
+      }
+      activeCategory = null;
+      activePathwayFilter = tag;
+      document.querySelectorAll(".cat-card").forEach((b) => b.classList.remove("active"));
+      document.querySelectorAll(".pathway-chip").forEach((b) => b.classList.remove("active"));
+      chip.classList.add("active");
+      const filtered = COMPOUNDS.filter((c) => (c.pathways || []).some((p) => normalizePathwayTag(p.tag) === normalizePathwayTag(tag)));
+      renderCompoundGrid(filtered);
+      document.getElementById("listLabel").textContent = `${tag} (${filtered.length})`;
+      document.getElementById("clearFilter").style.display = "flex";
+    });
+  });
+}
+
 function clearFilter() {
   activeCategory = null;
+  activePathwayFilter = null;
   document.querySelectorAll(".cat-card").forEach((b) => b.classList.remove("active"));
+  document.querySelectorAll(".pathway-chip").forEach((b) => b.classList.remove("active"));
   renderCompoundGrid(COMPOUNDS);
   document.getElementById("listLabel").textContent = "All compounds";
   document.getElementById("clearFilter").style.display = "none";
@@ -1402,12 +1722,16 @@ function catLabel(cat) {
     longevity: "Longevity",
     performance: "Performance",
     "inhibition-lowering": "Inhibition-lowering",
+    hair: "Hair",
+    peptides: "Peptides",
+    looks: "Looks / Skin",
+    hormones: "Hormones",
   };
   return labels[cat] || cat;
 }
 
 function renderCategoryCounts() {
-  ["fat-loss", "cognition", "skin", "recovery", "longevity", "performance", "inhibition-lowering"].forEach((cat) => {
+  ["fat-loss", "cognition", "skin", "recovery", "hair", "peptides", "looks", "hormones", "longevity", "performance", "inhibition-lowering"].forEach((cat) => {
     const el = document.getElementById(`count-${cat}`);
     if (el) el.textContent = COMPOUNDS.filter((c) => c.categories.includes(cat)).length + " compounds";
   });
@@ -1436,6 +1760,8 @@ function renderCompoundGrid(compounds) {
 
 function compoundCardHTML(c, i) {
   const isBookmarked = bookmarks.includes(c.id);
+  const aliases = c.aliases || [];
+  const categories = c.categories || [];
 
   return `
     <div class="compound-card" data-id="${c.id}" style="animation-delay:${i * 0.04}s">
@@ -1448,17 +1774,75 @@ function compoundCardHTML(c, i) {
         </button>
       </div>
       <div class="card-tags" style="cursor:pointer" onclick="openCompound('${c.id}')">
-        ${c.categories.map((cat) => `<span class="tag tag-cat">${catLabel(cat)}</span>`).join("")}
-        ${c.aliases
+        ${categories.map((cat) => `<span class="tag tag-cat">${catLabel(cat)}</span>`).join("")}
+        ${aliases
           .slice(0, 1)
           .map((a) => `<span class="tag tag-alias">${a}</span>`)
           .join("")}
+      </div>
+      <div class="card-pathways" onclick="openCompound('${c.id}')" style="cursor:pointer">
+        ${renderCompoundCardPathways(c)}
       </div>
       <div class="card-mechanism card-summary" onclick="openCompound('${c.id}')" style="cursor:pointer">
         ${escapeHtml(deriveCardFrontSummary(c))}
       </div>
       <div class="card-footer-hint" onclick="openCompound('${c.id}')" style="cursor:pointer">
         Effectiveness · safety · community notes →
+      </div>
+    </div>
+  `;
+}
+
+function renderCompoundCardPathways(c) {
+  const pathways = c.pathways || [];
+  const paths = pathways.slice(0, 3);
+  if (!paths.length) return "";
+  const more = pathways.length > 3 ? `<span class="tag tag-pathway">+${pathways.length - 3} more</span>` : "";
+  return `${paths
+    .map((p) => `<span class=\"tag tag-pathway\">${escapeHtml(p.tag)}</span>`)
+    .join("")} ${more}`;
+}
+
+function renderPathwayTagBlock(c) {
+  const pathways = c.pathways || [];
+  if (!pathways.length) return "";
+  return `
+    <div class="ds-label">Signaling pathways</div>
+    <div class="pathway-tags">
+      ${pathways
+        .map(
+          (p) => `<button type="button" class="pathway-tag" data-system="${escapeAttr(
+            p.system || ""
+          )}" data-pathway="${escapeAttr(p.tag)}" title="${escapeAttr(p.note || "")}">
+              <span class="pathway-system">${escapeHtml(p.system || "Other")}</span>
+              <span class="pathway-name">${escapeHtml(p.tag)}</span>
+              <span class="pathway-conf pathway-conf--${escapeHtml(p.confidence || "unclear")}">●</span>
+            </button>`
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function renderAnonThreadHtml(post) {
+  return `
+    <div class="anon-thread">
+      <div class="anon-post">
+        <div class="anon-post-header">
+          <span class="anon-post-name">${escapeHtml(post.name)}</span>
+          <span class="anon-post-date">${escapeHtml(post.date)}</span>
+          <span class="anon-post-id">ID: ${escapeHtml(post.id)}</span>
+          <span class="anon-post-no">No.${escapeHtml(post.no)}</span>
+        </div>
+        <div class="anon-post-body">
+          ${post.body
+            .map((line) =>
+              line.startsWith(">")
+                ? `<span class="anon-greentext">${escapeHtml(line)}</span>`
+                : `<span>${escapeHtml(line)}</span>`
+            )
+            .join("")}
+        </div>
       </div>
     </div>
   `;
@@ -1622,6 +2006,226 @@ function renderSurgeryGrid() {
   });
 }
 
+function initSurgeonsView() {
+  const wrap = document.getElementById("surgeonRegionFilters");
+  const search = document.getElementById("surgeonSearchInput");
+  if (!wrap || !search || !Array.isArray(SURGEONS_DATA)) return;
+
+  const countries = [...new Set(SURGEONS_DATA.map((s) => s.location.country || "Unknown"))].sort();
+  wrap.innerHTML = `
+    <div class="surgery-filter-row">
+      <span class="surgery-filter-label">Region</span>
+      <div class="surgery-chips">
+        <button type="button" class="surgery-chip active" data-country="">All</button>
+        ${countries.map((country) => `<button type="button" class="surgery-chip" data-country="${escapeAttr(country)}">${escapeHtml(country)}</button>`).join("")}
+      </div>
+    </div>
+  `;
+
+  wrap.querySelectorAll("[data-country]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const value = btn.dataset.country;
+      activeSurgeonRegionFilter = value || null;
+      wrap.querySelectorAll("[data-country]").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("surgeonClearType").style.display = activeSurgeonRegionFilter ? "flex" : "none";
+      renderSurgeonGrid();
+    });
+  });
+
+  document.getElementById("surgeonClearType").addEventListener("click", () => {
+    activeSurgeonRegionFilter = null;
+    wrap.querySelectorAll("[data-country]").forEach((b) => b.classList.remove("active"));
+    wrap.querySelector('[data-country=""]')?.classList.add("active");
+    document.getElementById("surgeonClearType").style.display = "none";
+    renderSurgeonGrid();
+  });
+
+  search.addEventListener("input", () => {
+    surgeonSearchQuery = search.value.trim();
+    renderSurgeonGrid();
+  });
+}
+
+function filteredSurgeons() {
+  return SURGEONS_DATA.filter((s) => {
+    if (activeSurgeonRegionFilter && (s.location.country || "").toLowerCase() !== activeSurgeonRegionFilter.toLowerCase()) return false;
+    if (!surgeonSearchQuery) return true;
+    const hay = `${s.name} ${s.title} ${s.clinic} ${s.location.city} ${s.location.state} ${s.location.country} ${s.specialties.join(" ")} ${s.procedures.join(" ")}`.toLowerCase();
+    return hay.includes(surgeonSearchQuery.toLowerCase());
+  });
+}
+
+function renderSurgeonGrid() {
+  const grid = document.getElementById("surgeonGrid");
+  const label = document.getElementById("surgeonListLabel");
+  if (!grid) return;
+  const list = filteredSurgeons();
+  if (label) {
+    label.textContent = list.length ? `Surgeons (${list.length})` : "Surgeons (no matches)";
+  }
+  grid.innerHTML = list.length
+    ? list.map((s, i) => surgeonCardHTML(s, i)).join("")
+    : '<div class="empty-panel">No surgeons match this filter.</div>';
+  grid.querySelectorAll(".surgeon-card").forEach((card) => {
+    card.addEventListener("click", () => openSurgeon(card.dataset.id));
+  });
+}
+
+function surgeonCardHTML(s, i) {
+  const flag = s.location.country === "USA" ? "🇺🇸" : s.location.country === "South Korea" ? "🇰🇷" : s.location.country === "Belgium" ? "🇧🇪" : s.location.country === "Colombia" ? "🇨🇴" : s.location.country === "Turkey" ? "🇹🇷" : s.location.country === "Brazil" ? "🇧🇷" : "🌍";
+  return `
+    <div class="compound-card surgeon-card" data-id="${escapeAttr(s.id)}" style="animation-delay:${i * 0.03}s">
+      <div class="sc-flag">${escapeHtml(flag)}</div>
+      <div class="card-header">
+        <div style="flex:1">
+          <div class="sc-name">${escapeHtml(s.name)}</div>
+          <div class="sc-location">${escapeHtml(s.location.city)}, ${escapeHtml(s.location.state)} · ${escapeHtml(s.location.country)}</div>
+        </div>
+      </div>
+      <div class="sc-tags">
+        ${s.specialties.map((tag) => `<span class="sc-tag">${escapeHtml(tag.replace(/-/g, " "))}</span>`).join("")}
+      </div>
+      <div class="sc-rep sc-rep--${escapeHtml(s.forumReputation || "unknown")}">Forum rep: ${escapeHtml((s.forumReputation || "unknown").toUpperCase())}</div>
+      <div class="sc-proc-count">${s.procedures.length} procedures listed</div>
+    </div>
+  `;
+}
+
+function openSurgeon(id, opts) {
+  const s = SURGEONS_DATA.find((x) => x.id === id);
+  if (!s) return;
+  document.getElementById("surgeonDetailContent").innerHTML = buildSurgeonDetailHTML(s);
+  setNavSection("surgeons");
+  showView("surgeonDetailView");
+  if (!opts || !opts.skipHash) {
+    history.replaceState(null, "", `${location.pathname}${location.search}`);
+  }
+  wireSurgeonDetailPage(s);
+}
+
+function buildSurgeonDetailHTML(s) {
+  const procedureLinks = (s.procedures || [])
+    .map((pid) => {
+      const sec = HARDMAXXING_LIST.find((x) => x.id === pid);
+      const label = sec ? sec.title : pid;
+      return `<button type="button" class="surgeon-proc-link" data-proc-id="${escapeAttr(pid)}">${escapeHtml(label)}</button>`;
+    })
+    .join("");
+  const threads = (s.patientThreads || [])
+    .map((t) => `<li><a href="${escapeAttr(t.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(t.label)}</a></li>`)
+    .join("");
+  return `
+    <div class="detail-hero">
+      <div class="detail-left">
+        <div class="detail-name">${escapeHtml(s.name)}</div>
+        <div class="detail-aliases">${escapeHtml(s.title)} · ${escapeHtml(s.clinic)}</div>
+        <div class="detail-header-tags">
+          <span class="tag tag-cat">${escapeHtml(s.location.country)}</span>
+          <span class="tag tag-cat">${escapeHtml(s.location.state)}</span>
+        </div>
+        <div class="detail-hero-actions detail-action-row">
+          <button type="button" class="tool-run-btn" id="surgeonCopyLinkBtn">Copy link</button>
+          <button type="button" class="tool-run-btn" id="surgeonRequestEditBtn">Request edit</button>
+        </div>
+      </div>
+      <div class="summary-grid" role="region" aria-label="At a glance">
+        <div class="summary-card summary-effectiveness">
+          <h3 class="summary-card-title">Clinic</h3>
+          <div class="summary-card-body"><a href="${escapeAttr(s.clinicUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.clinic)}</a></div>
+        </div>
+        <div class="summary-card summary-safety">
+          <h3 class="summary-card-title">Location</h3>
+          <div class="summary-card-body">${escapeHtml(s.location.city)}, ${escapeHtml(s.location.state)} · ${escapeHtml(s.location.country)}</div>
+        </div>
+        <div class="summary-card summary-rec">
+          <h3 class="summary-card-title">Specialties</h3>
+          <ul class="rec-list">
+            ${s.specialties.map((x) => `<li>${escapeHtml(x.replace(/-/g, " "))}</li>`).join("")}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-sections">
+      <div class="detail-section">
+        <div class="ds-label">Profile</div>
+        <div class="ds-title">Approach</div>
+        <div class="ds-body">${escapeHtml(s.approach)}</div>
+      </div>
+      <div class="detail-section">
+        <div class="ds-label">Procedures</div>
+        <div class="ds-title">Rendered in this directory</div>
+        <div class="surgeon-procs">${procedureLinks}</div>
+      </div>
+      <div class="detail-section">
+        <div class="ds-label">Forum links</div>
+        <div class="ds-title">Patient threads</div>
+        <ul class="forum-list">${threads}</ul>
+      </div>
+      <div class="detail-section">
+        <div class="ds-label">Community notes</div>
+        <div class="ds-title">Anonymous threads</div>
+        ${renderAnonThreadHtml({
+          name: "Anonymous",
+          date: "06/04/26(Thu)17:29:18",
+          id: "Ab9Y7z",
+          no: "9432",
+          body: [
+            "> Did Eppley do my infraorbital implant consult",
+            "Recovery was three weeks of swelling. Result looked clean in the follow-up photos. Patients report good orbital support and stable implant position."
+          ]
+        })}
+      </div>
+      <div class="detail-section">
+        <div class="ds-label">Notes</div>
+        <div class="ds-title">Community reputation</div>
+        <div class="ds-body">${escapeHtml(s.notes)}</div>
+      </div>
+    </div>
+  `;
+}
+
+function wireSurgeonDetailPage(s) {
+  document.getElementById("surgeonRequestEditBtn")?.addEventListener("click", () => {
+    openEditRequestDialog({ kind: "surgeon", id: s.id, title: s.name });
+  });
+  document.getElementById("surgeonCopyLinkBtn")?.addEventListener("click", async () => {
+    const url = `${location.origin}${location.pathname}${location.search}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      const el = document.getElementById("surgeonCopyLinkBtn");
+      if (el) el.textContent = "Copied";
+      setTimeout(() => {
+        if (el) el.textContent = "Copy link";
+      }, 1600);
+    } catch (_) {
+      window.prompt("Copy link:", url);
+    }
+  });
+  document.querySelectorAll(".surgeon-proc-link").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openHardmaxSection(btn.dataset.procId);
+    });
+  });
+}
+
+function getSurgeonsForProcedure(surgeryId) {
+  return SURGEONS_DATA.filter((s) => (s.procedures || []).includes(surgeryId));
+}
+
+function highlightPathwayFromQuery() {
+  const params = new URLSearchParams(location.search);
+  const pathway = params.get("pathway");
+  if (!pathway) return;
+  const norm = normalizePathwayTag(pathway);
+  document.querySelectorAll(".pathway-tag").forEach((btn) => {
+    if (normalizePathwayTag(btn.dataset.pathway) === norm) {
+      btn.classList.add("highlighted");
+    }
+  });
+}
+
 function hardmaxCardHTML(s, i) {
   const raw = s.content.replace(/\s+/g, " ").replace(/\[\d+\]/g, "").trim();
   const blurb = raw.slice(0, 168) + (raw.length > 168 ? "…" : "");
@@ -1718,6 +2322,19 @@ function buildHardmaxDetailHTML(s) {
               ${vm.cons.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}
             </ul>
           </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="ds-label">Surgeons</div>
+        <div class="ds-title">Surgeons who perform this</div>
+        <div class="surgeon-chips">
+          ${getSurgeonsForProcedure(s.id)
+            .map(
+              (sur) => `<button type="button" class="surgeon-chip" data-surgeon-id="${escapeAttr(sur.id)}">${escapeHtml(
+                (sur.location.country === "USA" ? "🇺🇸 " : sur.location.country === "South Korea" ? "🇰🇷 " : sur.location.country === "Belgium" ? "🇧🇪 " : sur.location.country === "Colombia" ? "🇨🇴 " : sur.location.country === "Turkey" ? "🇹🇷 " : sur.location.country === "Brazil" ? "🇧🇷 " : "🌍 ") + sur.name
+              )}</button>`)
+            .join("")}
         </div>
       </div>
 
@@ -1945,10 +2562,10 @@ function buildDetailHTML(c) {
       <div class="detail-left">
         <div class="detail-name">${escapeHtml(c.name)}</div>
         <div class="detail-aliases">
-          Also known as: <span>${c.aliases.map((a) => escapeHtml(a)).join(", ")}</span>
+          Also known as: <span>${(c.aliases || []).map((a) => escapeHtml(a)).join(", ")}</span>
         </div>
         <div class="detail-header-tags">
-          ${c.categories.map((cat) => `<span class="tag tag-cat">${escapeHtml(catLabel(cat))}</span>`).join("")}
+          ${(c.categories || []).map((cat) => `<span class="tag tag-cat">${escapeHtml(catLabel(cat))}</span>`).join("")}
           <span class="tag tag-class">${escapeHtml(c.classification || "")}</span>
         </div>
         <div class="detail-hero-actions detail-action-row">
@@ -2023,6 +2640,17 @@ function buildDetailHTML(c) {
           <p>${escapeHtml(vm.communityNotes)}</p>
           <p class="community-disclaimer">Anecdotes are not evidence of safety or efficacy.</p>
         </div>
+        ${renderAnonThreadHtml({
+          name: "Anonymous",
+          date: "06/04/26(Thu)17:29:18",
+          id: "x8B9aK",
+          no: "8821",
+          body: [
+            "> been running mk677 for 6 months",
+            "> lethargy was rough weeks 1-3",
+            "Water retention is real. Recommend timing dose before bed to sleep through the hunger spike. IGF-1 bloodwork at month 3 came back significantly elevated vs baseline."
+          ]
+        })}
       </div>
 
       <div class="detail-section">
@@ -2057,6 +2685,7 @@ function buildDetailHTML(c) {
             )
             .join("")}
         </ul>
+        ${renderPathwayTagBlock(c)}
       </div>
 
       <div class="detail-section">

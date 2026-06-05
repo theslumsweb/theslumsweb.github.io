@@ -1,0 +1,510 @@
+Name,Type,Primary Mechanism / Class
+Testosterone Base,Steroid (AAS),Unesterified Anabolic-Androgenic Steroid
+Testosterone Acetate,Steroid (AAS),Short-Ester Testosterone Derivative
+Testosterone Propionate,Steroid (AAS),Short-Ester Testosterone Derivative
+Testosterone Phenylpropionate,Steroid (AAS),Medium-Ester Testosterone Derivative
+Testosterone Isocaproate,Steroid (AAS),Medium-Ester Testosterone Derivative
+Testosterone Enanthate,Steroid (AAS),Long-Ester Testosterone Derivative
+Testosterone Cypionate,Steroid (AAS),Long-Ester Testosterone Derivative
+Testosterone Decanoate,Steroid (AAS),Long-Ester Testosterone Derivative
+Testosterone Undecanoate,Steroid (AAS),Ultra-Long-Ester Testosterone Derivative
+Nandrolone Base,Steroid (AAS),19-Nor Progestogenic Derivative
+Nandrolone Phenylpropionate (NPP),Steroid (AAS),Short-Ester 19-Nor Derivative
+Nandrolone Decanoate (Deca),Steroid (AAS),Long-Ester 19-Nor Derivative
+Nandrolone Cypionate,Steroid (AAS),Long-Ester 19-Nor Derivative
+Nandrolone Undecanoate,Steroid (AAS),Ultra-Long-Ester 19-Nor Derivative
+Trenbolone Base,Steroid (AAS),19-Nor Powerful Receptor Binder
+Trenbolone Acetate,Steroid (AAS),Short-Ester Trenbolone Derivative
+Trenbolone Enanthate,Steroid (AAS),Long-Ester Trenbolone Derivative
+Trenbolone Hexahydrobenzylcarbonate,Steroid (AAS),Parabolan / Long-Ester 19-Nor
+Boldenone Base,Steroid (AAS),Testosterone Derivative (Low Aromatization)
+Boldenone Undecylenate (Equipoise),Steroid (AAS),Long-Ester Boldenone Derivative
+Boldenone Acetate,Steroid (AAS),Short-Ester Boldenone Derivative
+Boldenone Cypionate,Steroid (AAS),Medium-Ester Boldenone Derivative
+Drostanolone Propionate (Masteron P),Steroid (AAS),Short-Ester DHT Derivative
+Drostanolone Enanthate (Masteron E),Steroid (AAS),Long-Ester DHT Derivative
+Methenolone Enanthate (Primobolan Depot),Steroid (AAS),Long-Ester DHT Derivative
+Methenolone Acetate (Oral Primo),Steroid (AAS),Oral DHT Derivative
+Methandrostenolone (Dianabol),Steroid (AAS),17aa Oral Testosterone Derivative
+Oxandrolone (Anavar),Steroid (AAS),17aa Oral DHT Derivative
+Stanozolol Oral (Winstrol),Steroid (AAS),17aa Oral DHT Derivative
+Stanozolol Injectable (Winstrol V),Steroid (AAS),Water-Suspension DHT Derivative
+Oxymetholone (Anadrol),Steroid (AAS),17aa Oral Potent DHT Variant
+Fluoxymesterone (Halotestin),Steroid (AAS),17aa Oral Highly Androgenic
+Chlorodehydromethyltestosterone (Tbol),Steroid (AAS),17aa Oral Cross-Derivative
+Mesterolone (Proviron),Steroid (AAS),Oral Active Non-17aa DHT
+Methyltestosterone,Steroid (AAS),Early 17aa Synthetic Testosterone
+Trestolone Acetate (MENT),Steroid (AAS),Ultra-Potent Experimental 19-Nor
+Dimethandrostenolone (DMAA Steroid),Steroid (AAS),Experimental Synthetic Androgen
+Metribolone (Methyltrienolone),Steroid (AAS),Highly Toxic Oral Trenbolone Variant
+Formebolone,Steroid (AAS),Synthetic Anabolic Modified Steroid
+Furazabol,Steroid (AAS),Stanozolol-Related Oral DHT Derivative
+Mebolazine (Dimethazine),Steroid (AAS),Azine-Linked Dymethazine Prohormone
+Methasterone (Superdrol),Steroid (AAS),Potent 17aa Oral DHT Prohormone
+Epiandrosterone,Steroid (AAS),Natural DHEA Metabolite / Prohormone
+1-Testosterone (Dihydroboldenone),Steroid (AAS),5-Alpha Reduced Boldenone Variant
+1-Androstenedione,Steroid (AAS),Prohormone Precursor to 1-Testosterone
+4-Androstenedione,Steroid (AAS),Direct Testosterone Prohormone Precursor
+Desoxymethyltestosterone (Madol),Steroid (AAS),Designer Anabolic Steroid
+Norboletone,Steroid (AAS),Early Generation Designer 19-Nor
+Tetrahydrogestrinone (THG / The Clear),Steroid (AAS),Highly Modified Designer Progestin
+Calusterone,Steroid (AAS),Orally Active Methylated Steroid
+Bolasterone,Steroid (AAS),Highly Potent Methylated Anabolic Agent
+Stenbolone Acetate,Steroid (AAS),Alpha-Methylated DHT Ester Derivative
+Drostanolone Base,Steroid (AAS),Unesterified Dihydrotestosterone Variant
+Ethilesestrenol,Steroid (AAS),Orally Active Progestogenic Anabolic
+Oxymesterone,Steroid (AAS),Hydroxylated Methyltestosterone Variant
+Clostebol Acetate,Steroid (AAS),Chlorinated Testosterone Ester Variant
+Quinbolone,Steroid (AAS),Boldenone Cyclopentenyl Ether Variant
+Mestanolone,Steroid (AAS),Methylated Dihydrotestosterone Variant
+Methandriol Dipropionate,Steroid (AAS),Estric Derivative Injection Compound
+BPC-157,Peptide,Gastric Pentadecapeptide Tissue Repair Agent
+TB-500 (Thymosin Beta-4 Full),Peptide,Cell Migration & Angiogenesis Sequence
+TB-4 Fragment (Ac-SDKP),Peptide,Targeted Tissue Regeneration Sequence
+Ipamorelin,Peptide,Selective GHRP Ghrelin Agonist
+GHRP-2,Peptide,Growth Hormone Releasing Peptide (Mild Hunger)
+GHRP-6,Peptide,Growth Hormone Releasing Peptide (High Hunger)
+Hexarelin,Peptide,Potent Desensitizing GHRP Sequence
+Sermorelin,Peptide,Short-Chain GHRH Analog (29 Amino Acids)
+Mod GRF 1-29 (CJC-1295 No DAC),Peptide,Tetrasubstituted GHRH Direct Pulsing
+CJC-1295 with DAC,Peptide,Extended Half-Life GHRH Affinity Complex
+Tesamorelin,Peptide,Lipodystrophy-Targeted GHRH Analog
+Human Growth Hormone (Somatropin),Peptide,Recombinant 191-Amino Acid HGH
+HGH Fragment 176-191,Peptide,Lipolytic C-Terminal Domain Fragment
+AOD9604,Peptide,Modified HGH Lipolytic Fragment Variant
+Melanotan I,Peptide,Linear Alpha-MSH Receptor Agonist
+Melanotan II,Peptide,Cyclic Alpha-MSH Agonist (Melanogenesis/Libido)
+PT-141 (Bremelanotide),Peptide,Central Nervous System Erectile Agonist
+Epitalon (Epithalon),Peptide,Pineal Gland Telomerase Activator
+Pinealon,Peptide,Short Bioregulator Neuro-Protective Sequence
+Thymalin,Peptide,Thymic Immune System Regulatory Peptide
+Cortexin,Peptide,Cerebral Cortex Extract Bioregulator
+Cardarine (GW-501516),SARM/PPAR,PPAR-Delta Receptor Agonist (Endurance)
+Stenabolic (SR-9009),SARM/Rev-ErbA,Rev-ErbA Alpha Agonist (Circadian/Metabolic)
+Ostarine (MK-2866),SARM,Selective Androgen Receptor Modulator
+Ligandrol (LGD-4033),SARM,Selective Androgen Receptor Modulator (Anabolic)
+Radarine (RAD-140),SARM,Highly Neuro-Protective Androgen Modulator
+Andarine (S-4),SARM,Early Generation Ocular-Binding SARM
+S-23,SARM,Highly Suppressive Orally Active SARM Variant
+LGD-3303,SARM,Potent Dry-Gain Selective Androgen Modulator
+YK-11,SARM,Steroidal Myostatin Inhibitor SARM Hybrid
+MK-677 (Ibutamoren),GHS (Non-Peptide),Oral Ghrelin Receptor Mimetic
+Clenbuterol,Metabolic Agent,Beta-2 Adrenergic Receptor Agonist
+Albuterol (Salbutamol),Metabolic Agent,Short-Acting Beta-2 Agonist
+Ephedrine HCl,Metabolic Agent,Alpha/Beta Adrenergic Receptor Stimulant
+Liothyronine Sodium (T3),Metabolic Agent,Exogenous Active Thyroid Hormone
+Levothyroxine Sodium (T4),Metabolic Agent,Exogenous Storage Thyroid Hormone
+Dinitrophenol (2,4-DNP),Metabolic Agent,Mitochondrial Uncoupling Agent (Dangerous)
+Semaglutide,GLP-1 Peptide,Glucagon-Like Peptide-1 Agonist (Appetite)
+Tirzepatide,GLP-1/GIP Peptide,Dual Incretin Receptor Mimetic
+Retatrutide,Triple Agonist,GLP-1 / GIP / Glucagon Receptor Agonist
+Anastrozole (Arimidex),Ancillary (AI),Type II Reversible Aromatase Inhibitor
+Letrozole (Femara),Ancillary (AI),Potent Type II Reversible AI
+Exemestane (Aromasin),Ancillary (AI),Type I Irreversible Suicidal AI
+Tamoxifen Citrate (Nolvadex),Ancillary (SERM),Selective Estrogen Receptor Modulator
+Clomiphene Citrate (Clomid),Ancillary (SERM),Pituitary Feedback Blocker / SERM
+Raloxifene (Evista),Ancillary (SERM),Bone/Breast Target-Specific SERM
+Toremifene Citrate (Fareston),Ancillary (SERM),Triphenylethylene Class SERM
+Human Chorionic Gonadotropin (hCG),Ancillary,LH Mimetic Glycoprotein Hormone
+Human Menopausal Gonadotropin (hMG),Ancillary,Direct LH and FSH Extract Mixture
+Recombinant FSH (Gonal-F),Ancillary,Pure Follicle-Stimulating Hormone
+Cabergoline (Dostinex),Ancillary,Dopamine D2 Receptor Agonist (Prolactin)
+Pramipexole (Mirapex),Ancillary,Dopamine Agonist (Prolactin Suppressor)
+Bromocriptine,Ancillary,Ergot-Derived Dopamine Agonist
+Finasteride,Ancillary (5alpha-IR),Type II 5-Alpha Reductase Inhibitor
+Dutasteride,Ancillary (5alpha-IR),Type I and II 5-Alpha Reductase Inhibitor
+RU58841,Ancillary (Topical),Non-Steroidal Topical Anti-Androgen
+CB-03-01 (Breezula),Ancillary (Topical),Topical Corticosteroid-Based Anti-Androgen
+Avelumab,Peptide,Monoclonal Antibody Immune Checkpoint
+IGF-1 DES,Peptide,Truncated Rapidly Acting Insulin Growth Factor
+IGF-1 LR3,Peptide,Long-Acting Extended Half-Life IGF Variant
+Mechano Growth Factor (MGF),Peptide,Splice Variant of IGF-1 (Local Tissue)
+PEG-MGF,Peptide,Pegylated Stabilized Mechano Growth Factor
+Follistatin 344,Peptide,Myostatin Binding Glycoprotein Sequence
+Follistatin 315,Peptide,Systemic Circulating Myostatin Inhibitor
+ACE-031,Protein Therapeutic,ActRIIB Receptor Fusion Protein (Myostatin)
+GDF-8 (Myostatin Propeptide),Peptide,Inhibitory Domain Compound
+Selank,Peptide,Synthetic Tuftsin Neurological Analog
+Semax,Peptide,ACTH Fragment Neuro-Regulatory Peptide
+Noopept,Nootropic,Peptide-Derived Synthetic Nootropic Agent
+Cerebrolysin,Peptide Mix,Porcine Brain Derived Neuropeptide Complex
+MOTS-c,Peptide,Mitochondrial-Derived Metabolic Regulatory Peptide
+Humanin,Peptide,Mitochondrial Cytoprotective Peptide Sequence
+SS-31 (Elamipretide),Peptide,Mitochondrial Inner-Membrane Target Peptide
+FoxO4-DRI,Peptide,Senolytic Apoptosis-Inducing Peptide Sequence
+KPV,Peptide,Anti-Inflammatory Tripeptide Sequence (Alpha-MSH Core)
+Vilon,Peptide,Epiphysis Regulatory Dipeptide Sequence
+GHK-Cu,Peptide,Copper-Binding Tripeptide Skin/Tissue Matrix
+LL-37,Peptide,Antimicrobial Human Cathelicidin Peptide
+CJC-1295 Base,Peptide,Modified GRF Sequence Structural Core
+Hexamin,Peptide,Experimental Cardiovascular Regenerative Chain
+Thymopentin (TP-5),Peptide,Immunomodulatory Active Fragment of Thymopoietin
+Splenopentin (SP-5),Peptide,Splenic Derived Immunomodulator
+Adipotide (FTPP),Peptide,Targeted Fat Cell Vascular Apoptosis Sequence
+Amylin,Peptide,Neuroendocrine Pancreatic Hormone Peptide
+Pramlintide,Peptide,Synthetic Amylin Analog for Glucose Control
+Leptin,Peptide,Adipose-Derived Satiety Signaling Peptide
+Kisspeptin-10,Peptide,Hypothalamic GnRH Pulse Regulator Sequence
+Gonadorelin (GnRH),Peptide,Direct Gonadotropin-Releasing Hormone Chain
+Leuprolide Acetate,Peptide,GnRH Agonist Over-Stimulator (Suppressive)
+Triptorelin,Peptide,Ultra-Potent GnRH Agonist Variant
+Cetrorelix,Peptide,Direct GnRH Receptor Antagonist
+Ganirelix,Peptide,Synthetic GnRH Antagonist Sequence
+Oxytocin,Peptide,Hypothalamic Neurohypophysial Neuropeptide
+Vasopressin,Peptide,Antidiuretic Endocrine Chain Peptide
+Desmopressin,Peptide,Synthetic Vasopressin Structural Analogue
+Argireline (Acetyl Hexapeptide-8),Peptide,Topical Neurotransmitter Blocker Sequence
+Snap-8,Peptide,Extended Octapeptide Neuromuscular Modulator
+Matrixyl 3000,Peptide Mix,Palmitoyl Oligopeptide Skin Structure Chain
+Copper Peptide GHK,Peptide,Uncomplexed Structural Tissue Tripeptide
+DsIP (Delta Sleep-Inducing Peptide),Peptide,Somnogenic Neurological Regulatory Peptide
+Epithalon Acetate,Peptide,Synthesized Telomere Base Pair Restorer
+Alarelin Acetate,Peptide,Synthetic LHRH Agonist Pentadecapeptide
+Buserelin,Peptide,Antineoplastic LHRH Analog Chain
+Goserelin,Peptide,Injectable Gonadotropin Suppressive Matrix
+Histrelin,Peptide,Nonapeptide Gonadotropin Releasing Agent
+Nafarelin,Peptide,Decapeptide Pituitary Stimulating Variant
+Sermorelin Acetate,Peptide,Pure Acetate Salt of GHRH 1-29
+Teduglutide,Peptide,Glucagon-Like Peptide-2 (GLP-2) Enteric Analog
+Liraglutide,Peptide,Fatty-Acid Acylated GLP-1 Receptor Agonist
+Exenatide,Peptide,Incretin Mimetic Derived from Gila Monster Saliva
+Ziconotide,Peptide,N-type Calcium Channel Blocker (Omega-Conotoxin)
+Linaclotide,Peptide,Guanylate Cyclase-C Agonist Peptidic Complex
+Plecanatide,Peptide,Fourteen-Amino Acid Gastrointestinal Cyclic Peptide
+Secretin,Peptide,Gastrointestinal Regulating Peptide Sequence
+Cholecystokinin (CCK-8),Peptide,Satiety and Digestive Peptide Sequence
+Gastrin,Peptide,Gastric Acid Secretion Peptide Inducer
+Glucagon,Peptide,Pancreatic Counter-Regulatory Counterpart to Insulin
+Insulin Lispro (Humalog),Peptide,Rapid-Acting Synthetic Human Insulin
+Insulin Aspart (Novolog),Peptide,Rapid-Acting Recombinant Insulin Variant
+Insulin Glulisine (Apidra),Peptide,Rapid-Acting Structurally Altered Insulin
+Insulin Regular (Humulin R),Peptide,Short-Acting Zinc-Stabilized Human Insulin
+Insulin NPH (Humulin N),Peptide,Intermediate-Acting Isophane Insulin
+Insulin Glargine (Lantus),Peptide,Long-Acting Micro-Precipitating Base Insulin
+Insulin Detemir (Levemir),Peptide,Long-Acting Fatty-Acid Bound Insulin
+Insulin Degludec (Tresiba),Peptide,Ultra-Long Multi-Hexamer Forming Insulin
+Salcatonin (Calcitonin Salmon),Peptide,Thyroid Derived Calcium Balancing Peptide
+Teriparatide,Peptide,Recombinant Human Parathyroid Hormone Fragment 1-34
+Abaloparatide,Peptide,Parathyroid Hormone-Related Protein Analog
+Romidepsin,Peptide,Bicyclic Peptide Histone Deacetylase Inhibitor
+Octreotide,Peptide,Synthetic Somatostatin Mimic Octapeptide
+Lanreotide,Peptide,Long-Acting Somatostatin Inhibitory Analog
+Pasireotide,Peptide,Multi-Receptor Somatostatin Variant Complex
+Pasireotide Pamoate,Peptide,Extended Release Cyclopeptide Salt Form
+Angiotensin II,Peptide,Vasoconstrictor Octapeptide Cardiovascular Loop
+Nesiritide,Peptide,Recombinant B-type Natriuretic Peptide (BNP)
+Bivalirudin,Peptide,Specific Direct Thrombin Inhibitor Hirudin Analog
+Eptifibatide,Peptide,Cyclic Heptapeptide Platelet Aggregation Inhibitor
+Agiolin,Peptide,Experimental Microvascular Circulation Peptide
+Thymosin Alpha-1 (Zadaxin),Peptide,T-Cell Function Restoring Immunomodulator
+Tuftsin,Peptide,Splenic Tetrapeptide Phagocytosis Stimulator
+Rigin,Peptide,Synthetic IgG Fragment Anti-Inflammatory Chain
+Imunofan,Peptide,Regulatory Hexapeptide T-Cell Stabilizer
+Goralatide,Peptide,Tetrapeptide Stem Cell Migration Inhibitor
+Hemorphin-7,Peptide,Opioid Receptor Binding Hemoglobin Fragment
+Beta-Casomorphin,Peptide,Exogenous Dietary Milk Derived Opioid Peptide
+Enkephalin (Met-Enkephalin),Peptide,Endogenous Pentapeptide Opioid Agonist
+Leu-Enkephalin,Peptide,Endogenous Leucine-Ending Opioid Sequence
+Dynorphin A,Peptide,Endogenous Kappa-Opioid Selective Chain
+Beta-Endorphin,Peptide,Endogenous Pro-opiomelanocortin Derived Neuropeptide
+Alpha-Endorphin,Peptide,Short Endorphin Segment Chain Sequence
+Gamma-Endorphin,Peptide,Modified Endorphin Central Activity Variant
+Substance P,Peptide,Tachykinin Neurokinin-1 Receptor Activator (Pain)
+Neurokinin A,Peptide,Endogenous Bronchoconstrictor Peptide Chain
+Neurokinin B,Peptide,Hypothalamic Reproduction Signaling Peptide
+Neuropeptide Y,Peptide,36-Amino Acid Orexigenic Brain Peptide
+Agouti-Related Peptide (AgRP),Peptide,Melanocortin Receptor Antagonist (Appetite)
+Orexin-A (Hypocretin-1),Peptide,Arousal and Wakefulness Signaling Neuropeptide
+Orexin-B,Peptide,Hypocretin Secondary Target Peptide Chain
+Galanin,Peptide,Inhibitory Neurotransmitter Peptide Sequence
+Somatostatin-14,Peptide,Endogenous Growth Hormone Inhibiting Factor
+Somatostatin-28,Peptide,Extended Structural Isoform of Somatostatin
+Motilin,Peptide,Gastrointestinal Interdigestive Cleansing Agonist
+Ghrelin (Acylated),Peptide,Active Hunger Stimulating Octanoylated Chain
+Ghrelin (Unacylated),Peptide,Circulating Inactive Metabolic Des-Acyl Ghrelin
+Obestatin,Peptide,Ghrelin Gene Counterpart Appetite Suppressor
+Pancreatic Polypeptide,Peptide,PP-Receptor Satiety Signaling Molecule
+Peptide YY (PYY 3-36),Peptide,Y2 Receptor Mediated Appetite Reducer
+Enterostatin,Peptide,Procolipase Activation Product (Fat Satiety)
+Neuromedin U,Peptide,Contractile Anorexigenic Brain-Gut Peptide
+Neuromedin S,Peptide,Circadian Rhythm Core Regulator Peptide
+Bombesin,Peptide,Amphibian Derived Gastrin Releasing Analogue
+Gastrin-Releasing Peptide (GRP),Peptide,Human Bombesin Homologue Chain
+Calcimededin,Peptide,Experimental Skeletal Calcium Density Complex
+Parathyroid Hormone (PTH 1-84),Peptide,Full Length Bone-Remodeling Endocrine Chain
+Calcitonin,Peptide,Parafollicular Calcium Homeostasis Chain
+Adrenomedullin,Peptide,Vasodilator Hypotensive Peptide Compound
+Endothelin-1,Peptide,Endothelial Derived Vasoconstrictor Isoform
+Endothelin-2,Peptide,Vascular Constricting Structural Variant
+Endothelin-3,Peptide,Neuroendocrine Tissue Vasoconstrictor Chain
+Bradykinin,Peptide,Inflammatory Vasodilator Nonapeptide Chain
+Kallidin (Lys-Bradykinin),Peptide,Tissue-Kallikrein Generated Decapeptide
+Atrial Natriuretic Peptide (ANP),Peptide,Cardiac Fluid Volume Reduction Hormone
+Brain Natriuretic Peptide (BNP-32),Peptide,Ventricular Volume Homeostasis Complex
+C-Type Natriuretic Peptide (CNP),Peptide,Vascular Endothelial Autocrine Sequence
+Guanylin,Peptide,Intestinal Chloride Secretion Intracellular Loop
+Uroguanylin,Peptide,Renal and Intestinal Fluid Regulator Chain
+Lymphokine IL-2,Peptide,Recombinant Interleukin-2 T-Cell Trophoblast
+Erythropoietin (EPO),Glycoprotein,Red Blood Cell Production Stimulator
+Darbepoetin Alfa,Glycoprotein,Extended Half-Life Erythropoiesis Variant
+Peginesatide,Peptide,Pegylated Mimetic Peptide Erythropoietin Agonist
+Thrombopoietin,Glycoprotein,Megakaryocyte Proliferation Inducer (Platelets)
+Romiplostim,Peptide-Fc,Peptibody Class Platelet Production Stimulator
+Eltrombopag,Small Molecule,Non-Peptide Thrombopoietin Receptor Agonist
+Filgrastim (G-CSF),Protein,Granulocyte Colony-Stimulating Factor (WBCs)
+Pegfilgrastim,Protein,Pegylated Granulocyte Colony Stimulator
+Sargramostim (GM-CSF),Protein,Granulocyte-Macrophage Colony Stimulator
+Oprelvekin (IL-11),Peptide,Recombinant Interleukin-11 Platelet Recovery
+Anakinra,Protein,Interleukin-1 Receptor Antagonist (IL-1Ra)
+Canakinumab,Peptide,Anti-IL-1 Beta Monoclonal Antibody
+Tocilizumab,Peptide,IL-6 Receptor Target Monoclonal Antibody
+Secukinumab,Peptide,Interleukin-17A Targeted Monoclonal Antibody
+Ustekinumab,Peptide,Dual IL-12 and IL-23 Inhibiting Antibody
+Adalimumab (Humira),Peptide,Anti-TNF Alpha Recombinant Monoclonal Antibody
+Infliximab (Remicade),Peptide,Chimeric Anti-TNF Alpha Antibody Complex
+Etanercept (Enbrel),Protein-Fc,TNF Receptor Fusion Protein Blocker
+Abatacept,Protein-Fc,T-Cell Costimulation Modulator Fusion Protein
+Belatacept,Protein-Fc,Modified High-Affinity T-Cell Fusion Complex
+Rituximab,Peptide,Anti-CD20 B-Cell Depleting Monoclonal Antibody
+Trastuzumab (Herceptin),Peptide,HER2 Receptor Targeted Monoclonal Antibody
+Bevacizumab (Avastin),Peptide,VEGF Targeting Angiogenesis Inhibitor Monoclonal
+Cetuximab,Peptide,EGFR Signal Blocker Monoclonal Antibody
+Panitumumab,Peptide,Fully Human EGFR Specific Monoclonal Antibody
+Denosumab (Prolia),Peptide,RANKL Targeting Osteoclast Inhibitor Monoclonal
+Omalizumab (Xolair),Peptide,Anti-IgE Mast-Cell Stabilizing Antibody
+Reslizumab,Peptide,Anti-IL-5 Eosinophilic Asthmatic Antibody
+Mepolizumab,Peptide,Humanized IL-5 Targeting Monoclonal Chain
+Benralizumab,Peptide,IL-5 Receptor Alpha Target Antibody Complex
+Dupilumab (Dupixent),Peptide,Dual IL-4 and IL-13 Receptor Antagonist Monoclonal
+Vedolizumab,Peptide,Alpha-4-Beta-7 Integrin Gut-Selective Monoclonal
+Natalizumab,Peptide,Alpha-4 Integrin Cell Adhesion Molecule Blocker
+Eculizumab,Peptide,Terminal Complement Protein C5 Targeted Inhibitor
+Ravulizumab,Peptide,Long-Acting Terminal Complement C5 Monoclonal
+Eranumab,Peptide,CGRP Receptor Migraine Preventive Monoclonal
+Fremanezumab,Peptide,Calcitonin Gene-Related Peptide Ligand Antibody
+Galcanezumab,Peptide,CGRP Ligand Specific Preventive Monoclonal
+Eptinezumab,Peptide,Intravenous CGRP Targeting Preventative Monoclonal
+Teplizumab,Peptide,Anti-CD3 T-Cell Response Modifying Monoclonal
+Inotuzumab Ozogamicin,Peptide-Drug,CD22 Targeted Antibody-Drug Conjugate
+Brentuximab Vedotin,Peptide-Drug,CD30 Targeted Antineoplastic Conjugate
+Gemtuzumab Ozogamicin,Peptide-Drug,CD33 Targeted Cytotoxic Conjugate
+Polatuzumab Vedotin,Peptide-Drug,CD79b Specific Cleavable Conjugate Complex
+Enfortumab Vedotin,Peptide-Drug,Nectin-4 Specific Monoclonal Conjugate
+Sacituzumab Govitecan,Peptide-Drug,Trop-2 Targeted Topoisomerase Conjugate
+Trastuzumab Deruxtecan,Peptide-Drug,HER2 Specific Topoisomerase-1 Inhibitor Conjugate
+Moxetumomab Pasudotox,Peptide-Toxin,CD22 Specific Immunotoxin Fusion Fragment
+Tagraxofusp,Peptide-Toxin,CD123 Targeted Diphtheria Toxin Fusion Protein
+Denileukin Diftitox,Peptide-Toxin,IL-2 Receptor Target Diphtheria Toxin Hybrid
+Blinatumomab,Bispecific,CD19 / CD3 Bispecific T-Cell Engager (BiTE)
+Amivantamab,Bispecific,EGFR / c-Met Dual Specific Monoclonal Antibody
+Teclistamab,Bispecific,B-cell Maturation Antigen (BCMA) Dual Engager
+Glofitamab,Bispecific,CD20 / CD3 T-Cell T-Cell Recruiting Bispecific monoclona
+Mosunetuzumab,Bispecific,CD20 / CD3 T-Cell Directing Structural Antibody
+Epcoritamab,Bispecific,Subcutaneous CD20/CD3 T-Cell Engager Bispecific
+Faricimab,Bispecific,VEGF-A / Angiopoietin-2 Dual Retinal Pathway Neutralizer
+Teprotumumab,Peptide,IGF-1 Receptor Antagonist Monoclonal Antibody
+Margetuximab,Peptide,Fc-Optimized HER2 Targeted Monoclonal Chain
+Ranibizumab (Lucentis),Peptide Fragment,VEGF-A Targeted Monoclonal Antigen-Binding Fragment
+Pegaptanib,Aptamer,Pegylated Anti-VEGF RNA Oligonucleotide
+Aflibercept (Eylea),Protein-Fc,VEGF Trap Recombinant Fusion Protein
+Belimumab,Peptide,B-Lymphocyte Stimulator (BLyS) Specific Monoclonal
+Anifrolumab,Peptide,Type I Interferon Receptor Antagonist Antibody
+Ibalizumab,Peptide,CD4-Directed Post-Attachment HIV Inhibitor Monoclonal
+Maraviroc,Small Molecule,CCR5 Coreceptor Antagonist (Non-Peptide Entry Inhibitor)
+Enfuvirtide (T-20),Peptide,Biomimetic 36-Amino Acid HIV Fusion Inhibitor
+Fostemsavir,Small Molecule,gp120 Directed Attachment Inhibitor Prodrug
+Icatibant,Peptide,Selective Bradykinin B2 Receptor Antagonist Peptidic
+Lanadelumab,Peptide,Plasma Kallikrein Inhibiting Monoclonal Antibody
+Berotralstat,Small Molecule,Oral Plasma Kallikrein Inhibitor
+Asfotase Alfa,Protein-Fc,Tissue Non-Specific Alkaline Phosphatase Fusion Protein
+Sebelipase Alfa,Protein,Recombinant Lysosomal Acid Lipase Enzyme
+Alglucosidase Alfa,Protein,Recombinant Human Lysosomal Alpha-Glucosidase
+Galsulfase,Protein,Recombinant Arylsulfatase B Human Enzyme
+Idursulfase,Protein,Recombinant Human Iduronate-2-Sulfatase
+Elosulfase Alfa,Protein,Recombinant Human N-acetylgalactosamine-6-sulfatase
+Vestronidase Alfa,Protein,Recombinant Human Beta-Glucuronidase
+Velmanase Alfa,Protein,Recombinant Human Alpha-Mannosidase
+Olipudase Alfa,Protein,Recombinant Human Acid Sphingomyelinase Enzyme
+Pegvaliase,Peptide-Enzyme,Pegylated Recombinant Phenylalanine Ammonia Lyase
+Pegademase Bovine,Peptide-Enzyme,Adenosine Deaminase Enzyme Complex
+Elapegademase,Peptide-Enzyme,Recombinant Adenosine Deaminase Replacement
+Agalsidase Beta,Protein,Recombinant Human Alpha-Galactosidase A
+Imiglucerase,Protein,Recombinant Macrophage-Targeted Glucocerebrosidase
+Velaglucerase Alfa,Protein,Gene-Activated Human Glucocerebrosidase Replacement
+Taliglucerase Alfa,Protein,Plant-Cell Expressed Recombinant Glucocerebrosidase
+Miglustat,Small Molecule,Oral Substrate Reduction Glucosylceramide Synthase Inhibitor
+Eliglustat,Small Molecule,Potent Ceramide Glucosyltransferase Inhibitor
+Sapropterin Dihydrochloride,Small Molecule,Synthetic BH4 Cofactor
+Glycerol Phenylbutyrate,Small Molecule,Nitrogen Scavenging Prodrug Agent
+Sodium Phenylbutyrate,Small Molecule,Urea Cycle Disorder Management Salt
+Carglumic Acid,Small Molecule,N-Acetylglutamate Synthase Structural Analogue
+Trientine Hydrochloride,Small Molecule,Copper Chelating Pyridine Derivative
+Penicillamine,Small Molecule,Thiol-Based Copper Chelator / Heavy Metal Complex
+Deferasirox,Small Molecule,Orally Active Tridentate Iron Chelator
+Deferiprone,Small Molecule,Orally Active Bidentate Iron Binding Agent
+Deferoxamine,Small Molecule,Bacterial Derived Hexadentate Iron Chelating Agent
+Voxelotor,Small Molecule,Sickle Hemoglobin Affinity Modulator (Anti-Sickling)
+Crizanlizumab,Peptide,P-Selectin Inhibitor Vaso-Occlusive Monoclonal Antibody
+Mitapivat,Small Molecule,Pyruvate Kinase Allosteric Activator Agent
+Luspatercept,Protein-Fc,Modified Activin Receptor Type IIB Fusion Trap
+Sotatercept,Protein-Fc,Activin Receptor Type IIA Fusion Trap (PAH Control)
+Riociguat,Small Molecule,Soluble Guanylyl Cyclase (sGC) Direct Stimulator
+Selexipag,Small Molecule,Oral Non-Prostanoid IP Prostacyclin Receptor Agonist
+Treprostinil,Small Molecule,Prostacyclin Vasodilator Analogue Complex
+Iloprost,Small Molecule,Inhaled Prostacyclin Structural Analogue
+Epoprostenol,Small Molecule,Intravenous Synthetic Prostacyclin Base
+Bosentan,Small Molecule,Dual Endothelin Receptor (ETA/ETB) Antagonist
+Ambrisentan,Small Molecule,Selective Endothelin Type A (ETA) Antagonist
+Macitentan,Small Molecule,Tissue-Targeted Dual Endothelin Receptor Antagonist
+Sildenafil (Revatio/Viagra),Small Molecule,Phosphodiesterase-5 (PDE5) Inhibitor
+Tadalafil (Adcirca/Cialis),Small Molecule,Long-Acting Phosphodiesterase-5 Inhibitor
+Vardenafil,Small Molecule,Selective Phosphodiesterase-5 Inhibitor Base
+Avanafil,Small Molecule,Rapid-Onset Phosphodiesterase-5 Inhibitor Agent
+Mecamylamine,Small Molecule,Nicotinic Acetylcholine Receptor Ganglionic Blocker
+Hexamethonium,Small Molecule, Ganglionic Nicotinic Antagonist Outlier
+Trimethaphan Camsylate,Small Molecule,Short-Acting Intravenous Ganglionic Blocker
+Nitroprusside Sodium,Small Molecule,Direct Nitric Oxide Donor Vasodilator
+Hydralazine,Small Molecule,Direct Peripheral Arterial Smooth Muscle Relaxant
+Minoxidil (Oral),Small Molecule,ATP-Sensitive Potassium Channel Opener Vasodilator
+Diazoxide,Small Molecule,Thiazide Derivative Potassium Channel Opener
+Fenoldopam Mesylate,Small Molecule,Peripheral Dopamine D1 Receptor Agonist Vasodilator
+Tolazoline,Small Molecule,Competitive Non-Selective Alpha Adrenergic Antagonist
+Phentolamine,Small Molecule,Reversible Non-Selective Alpha-1/Alpha-2 Blocker
+Phenoxybenzamine,Small Molecule,Irreversible Alkylating Non-Selective Alpha Blocker
+Prazosin,Small Molecule,Selective Quinazoline Alpha-1 Adrenergic Antagonist
+Terazosin,Small Molecule,Long-Acting Selective Alpha-1 Receptor Blocker
+Doxazosin,Small Molecule,Extended-Release Alpha-1 Adrenergic Antagonist
+Alfuzosin,Small Molecule,Uroselective Alpha-1A Adrenergic Antagonist
+Tamsulosin (Flomax),Small Molecule,High-Affinity Alpha-1A/1D Receptor Blocker
+Silodosin,Small Molecule,Highly Selective Alpha-1A Adrenergic Blocker
+Yohimbine HCl,Small Molecule,Indole Alkaloid Selective Alpha-2 Antagonist (Lipolysis)
+Rauwolscine (Alpha-Yohimbine),Small Molecule,Diastereoisomer Alpha-2 Antagonist Variant
+Clonidine,Small Molecule,Centrally Acting Alpha-2 Adrenergic Agonist
+Guanfacine,Small Molecule,Selective Central Alpha-2A Receptor Agonist
+Methyldopa,Small Molecule,Central Alpha-2 Agonist via False Transmitter Conversion
+Moxonidine,Small Molecule,Imidazoline Receptor Type 1 (I1) Agonist
+Rilmenidine,Small Molecule,Oxazoline Class Imidazoline Receptor Agonist
+Propranolol,Small Molecule,Non-Selective Beta Adrenergic Blocker (Lipophilic)
+Nadolol,Small Molecule,Long-Acting Non-Selective Beta Adrenergic Antagonist
+Timolol,Small Molecule,Non-Selective Beta Blocker (Ocular/Systemic)
+Pindolol,Small Molecule,Non-Selective Beta Blocker with Intrinsic Sympathomimetic Activity
+Acebutolol,Small Molecule,Selective Beta-1 Blocker with ISA Complex
+Atenolol,Small Molecule,Hydrophilic Selective Beta-1 Adrenergic Blocker
+Metoprolol Succinate,Small Molecule,Extended-Release Selective Beta-1 Blocker
+Metoprolol Tartrate,Small Molecule,Immediate-Release Beta-1 Antagonist
+Esmolol Hydrochloride,Small Molecule,Ultra-Short-Acting Intravenous Beta-1 Blocker
+Betaxolol,Small Molecule,High-Affinity Selective Beta-1 Blocker Agent
+Bisoprolol Fumarate,Small Molecule,Highly Potent Selective Beta-1 Adrenergic Antagonist
+Nebivolol,Small Molecule,Beta-1 Selective Blocker with Nitric Oxide Vasodilation
+Carvedilol,Small Molecule,Non-Selective Beta and Alpha-1 Adrenergic Antagonist
+Labetalol,Small Molecule,Dual Alpha-1 and Non-Selective Beta Receptor Blocker
+Amiodarone,Small Molecule,Class III Potassium Channel Blocker Antiarrhythmic
+Dronedarone,Small Molecule,Non-Iodinated Benzofuran Class III Antiarrhythmic
+Sotalol,Small Molecule,Dual Class II (Beta-Blocker) and Class III Antiarrhythmic
+Ibutilide Fumarate,Small Molecule,Intravenous Class III Antiarrhythmic (Ikr Activator)
+Dofetilide,Small Molecule,Pure Class III Rapid Delayed Rectifier Channel Blocker
+Flecainide Acetate,Small Molecule,Class Ic Sodium Channel Blocker Antiarrhythmic
+Propafenone,Small Molecule,Class Ic Antiarrhythmic with Weak Beta Blocking Properties
+Mexiletine,Small Molecule,Class Ib Oral Sodium Channel Blocker
+Tocainide,Small Molecule,Class Ib Lidocaine Analogue Antiarrhythmic Agent
+Lidocaine (Intravenous),Small Molecule,Class Ib Voltage-Gated Sodium Channel Antagonist
+Quinidine,Small Molecule,Cinchona Alkaloid Class Ia Antiarrhythmic
+Procainamide,Small Molecule,Class Ia Sodium and Potassium Channel Blocker
+Disopyramide,Small Molecule,Class Ia Antiarrhythmic with Anticholinergic Side Effects
+Digoxin,Small Molecule,Cardiac Glycoside Sodium-Potassium ATPase Inhibitor
+Digitoxin,Small Molecule,Highly Lipophilic Cardiac Glycoside Variant
+Milrinone,Small Molecule,Phosphodiesterase-3 (PDE3) Inhibitor Inodilator
+Inamrinone,Small Molecule,Early Generation Pyridine PDE3 Inhibitor
+Levosimendan,Small Molecule,Calcium Sensitizer and K-ATP Channel Opener
+Nesiritide (BNP),Peptide,Recombinant Human B-Type Natriuretic Complex
+Sacubitril,Small Molecule,Neprilysin Inhibitor (Natriuretic Peptide Stabilizer)
+Valsartan,Small Molecule,Angiotensin II Type 1 Receptor Blocker (ARB)
+Losartan,Small Molecule,Imidazole-Derived Angiotensin II Receptor Antagonist
+Candesartan Cilexetil,Small Molecule,Prodrug Ester Angiotensin Receptor Blocker
+Eprosartan,Small Molecule,Non-Biphenyl Angiotensin II Antagonist Complex
+Irbesartan,Small Molecule,Long-Acting Non-Peptide Angiotensin Blocker
+Olmesartan Medoxomil,Small Molecule,Hydrolyzed Ester Angiotensin II Antagonist
+Telmisartan,Small Molecule,Highly Lipophilic ARB with PPAR-Gamma Modulating Activity
+Azilsartan Medoxomil,Small Molecule,Potent Angiotensin II Type 1 Antagonist
+Captopril,Small Molecule,Sulfhydryl-Containing Angiotensin-Converting Enzyme Inhibitor
+Enalapril Maleate,Small Molecule,Prodrug Dicarboxylate ACE Inhibitor Base
+Lisinopril,Small Molecule,Lysine Analogue Structural Active ACE Inhibitor
+Ramipril,Small Molecule,Bicyclic Prodrug Angiotensin Converting Enzyme Inhibitor
+Benazepril,Small Molecule,Benzazepine Class Prodrug ACE Inhibitor
+Fosinopril Sodium,Small Molecule,Phosphinic Acid Containing Prodrug ACE Inhibitor
+Quinapril,Small Molecule,Tetrahydroisoquinoline Prodrug ACE Inhibitor
+Moexipril,Small Molecule,Long-Acting Dicarboxylate ACE Inhibitor Variant
+Perindopril Erbumine,Small Molecule,Highly Potent Tissue-Specific ACE Inhibitor
+Trandolapril,Small Molecule,Lipophilic Lipophilic Cleaved ACE Inhibitor Matrix
+Aliskiren,Small Molecule,Direct Renin Inhibitor Piperidine Analogue
+Verapamil Hydrochloride,Small Molecule,Phenylalkylamine Class Non-Dihydropyridine Calcium Blocker
+Diltiazem Hydrochloride,Small Molecule,Benzothiazepine Class Non-Dihydropyridine Calcium Blocker
+Amlodipine Besylate,Small Molecule,Long-Acting Dihydropyridine Calcium Channel Blocker
+Nifedipine (Extended Release),Small Molecule,Short-Acting Prototype Dihydropyridine Calcium Blocker
+Felodipine,Small Molecule,Vascular Selective Dihydropyridine Calcium Blocker
+Isradipine,Small Molecule,Dihydropyridine Calcium Antagonist Variant
+Nicardipine Hydrochloride,Small Molecule,Intravenous and Oral Dihydropyridine Channel Blocker
+Nisoldipine,Small Molecule,Coat-Core Formulated Dihydropyridine Calcium Blocker
+Clevidipine,Small Molecule,Ultra-Short-Acting Intravenous Esterase-Cleaved Calcium Blocker
+Nimodipine,Small Molecule,Cerebral-Vascular Selective Dihydropyridine Calcium Blocker
+Vericiguat,Small Molecule,Soluble Guanylyl Cyclase (sGC) Stimulator (Heart Failure)
+Omecamtiv Mecarbil,Small Molecule,Cardiac Myosin Activator Agent
+Mavacamten,Small Molecule,Cardiac Myosin Inhibitor (Hypertrophic Cardiomyopathy)
+Ranolazine,Small Molecule,Late Sodium Current Inhibitor Antianginal Agent
+Ivabradine,Small Molecule,Hyperpolarization-Activated Cyclic Nucleotide-Gated (HCN) Channel Blocker
+Trimethazidine,Small Molecule,Fatty Acid Oxidation Inhibitor Antianginal Agent
+Nicorandil,Small Molecule,Dual Potassium Channel Opener and Nitrate Vasodilator
+Isosorbide Mononitrate,Small Molecule,Long-Acting Organic Nitrate Vasodilator
+Isosorbide Dinitrate,Small Molecule,Organic Nitrate Nitrovasodilator Complex
+Nitroglycerin (Sublingual),Small Molecule,Rapid Active Direct Nitric Oxide Precursor
+Amyl Nitrite,Small Molecule,Inhalant Volatile Organic Nitrate Complex
+Pentaerythritol Tetranitrate,Small Molecule,Extended-Release Organic Nitrate Ester
+Atorvastatin (Lipitor),Small Molecule,HMG-CoA Reductase Inhibitor Antilipedemic
+Rosuvastatin (Crestor),Small Molecule,Hydrophilic High-Potency HMG-CoA Inhibitor
+Simvastatin (Zocor),Small Molecule,Prodrug Lactone HMG-CoA Reductase Inhibitor
+Pravastatin Sodium,Small Molecule,Hydrophilic Open-Ring HMG-CoA Inhibitor
+Lovastatin,Small Molecule,Fungal-Derived Prototype HMG-CoA Reductase Inhibitor
+Fluvastatin,Small Molecule,Fully Synthetic Indole Class HMG-CoA Blocker
+Pitavastatin,Small Molecule,Cyclopropyl-Modified HMG-CoA Reductase Inhibitor
+Ezetimibe,Small Molecule,Niemann-Pick C1-Like 1 (NPC1L1) Cholesterol Absorption Inhibitor
+Evolocumab (Repatha),Peptide,PCSK9 Monoclonal Antibody (LDL Reduction)
+Alirocumab (Praluent),Peptide,PCSK9 Inhibiting Human Monoclonal Antibody
+Inclisiran,siRNA,Small Interfering RNA Targeting PCSK9 Translation
+Bempedoic Acid,Small Molecule,Adenosine Triphosphate-Citrate Lyase (ACL) Inhibitor
+Fenofibrate,Small Molecule,PPAR-Alpha Agonist Fibric Acid Derivative
+Gemfibrozil,Small Molecule,Non-Halogenated Phenoxyalkanoic Acid Fibrate
+Clinofibrate,Small Molecule,Fibric Acid Related Lipid Lowering Matrix
+Cholestyramine,Polymer Resin,Bile Acid Sequestrant Anion-Exchange Polymer
+Colestipol,Polymer Resin,Copolymer Bile Acid Sequestrant Complex
+Colesevelam Hydrochloride,Polymer Resin,Non-Absorbed Polyallylamine Bile Acid Binder
+Niacin (Extended Release),Small Molecule,Nicotinic Acid Vitamin B3 Antilipedemic
+Omega-3-Acid Ethyl Esters,Lipid Mixture,Purified Marine-Derived Triglyceride Reducer
+Icosapent Ethyl (Vascepa),Lipid Molecule,Pure Eicosapentaenoic Acid (EPA) Ethyl Ester
+Mipomersen,Antisense Oligo,Apolipoprotein B-100 Translation Inhibitor
+Lomitapide,Small Molecule,Microsomal Triglyceride Transfer Protein (MTP) Inhibitor
+Evinacumab,Peptide,ANGPTL3 Targeted Monoclonal Antibody
+Volanesorsen,Antisense Oligo,Apolipoprotein C-III Translation Inhibitor Agent
+Metformin Hydrochloride,Small Molecule,Biguanide AMPK Activator (Insulin Sensitivity)
+Glipizide,Small Molecule,Second-Generation Sulfonylurea K-ATP Channel Blocker
+Glyburide (Glibenclamide),Small Molecule,Sulfonylurea Insulin Secretagogue Compound
+Glimepiride,Small Molecule,Third-Generation Sulfonylurea Secretagogue Variant
+Repaglinide,Small Molecule,Meglitinide Class Potassium Channel Blocker Secretagogue
+Nateglinide,Small Molecule,D-Phenylalanine Derivative Meglitinide Secretagogue
+Pioglitazone,Small Molecule,Thiazolidinedione PPAR-Gamma Receptor Agonist
+Rosiglitazone,Small Molecule,Thiazolidinedione Class Insulin Sensitizer Variant
+Acarbose,Small Molecule,Microbial Pseudo-Tetrasaccharide Alpha-Glucosidase Inhibitor
+Miglitol,Small Molecule,Desojimycin Derivative Alpha-Glucosidase Inhibitor
+Sitagliptin Phosphate,Small Molecule,Dipeptidyl Peptidase-4 (DPP-4) Enzyme Inhibitor
+Saxagliptin,Small Molecule,Cyanopyrrolidine Class DPP-4 Inhibitor Complex
+Linagliptin,Small Molecule,Xanthine-Based Non-Peptidic DPP-4 Inhibitor
+Alogliptin,Small Molecule,Quinazolinone Class Selective DPP-4 Inhibitor
+Vildagliptin,Small Molecule,Substituted Pyrrolidine DPP-4 Antagonist
+Canagliflozin,Small Molecule,Sodium-Glucose Cotransporter 2 (SGLT2) Inhibitor
+Dapagliflozin,Small Molecule,Selective SGLT2 C-Glucoside Inhibitor Base
+Empagliflozin,Small Molecule,Potent Oral SGLT2 Cotransporter Inhibitor
+Ertugliflozin,Small Molecule,Dioxabicyclo Octane SGLT2 Inhibitor Matrix
+Bexagliflozin,Small Molecule,Non-Glucoside SGLT2 Competitive Inhibitor
+Sotagliflozin,Small Molecule,Dual SGLT1 and SGLT2 Cotransporter Inhibitor
+Colesevelam (Antidiabetic),Polymer Resin,Bile Acid Binder with Secondary Glucose Lowering Actions
+Bromocriptine Mesylate (Cycloset),Small Molecule,Dopamine Agonist Formulated for Glycemic Control
+Pramlintide Acetate,Peptide,Exogenous Amylin Receptor Peptide Agonist

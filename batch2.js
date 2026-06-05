@@ -44,6 +44,219 @@ const NEW_COMPOUNDS_2 = [
   },
 
   {
+    id: "argireline",
+    name: "Argireline",
+    aliases: ["Argireline", "Acetyl Hexapeptide-8"],
+    categories: ["skin", "recovery"],
+    classification: "Topical peptide cosmetic agent",
+    whatItIs: "Argireline is a synthetic hexapeptide marketed for topical anti-wrinkle applications. It is designed to interfere with SNARE-mediated neurotransmitter release in facial muscle nerve endings, reducing expression lines in cosmetic skin care formulations. It is not an approved systemic drug.",
+    mechanism: [
+      { text: "Inhibits SNAP-25-dependent exocytosis by mimicking the N-terminal end of SNAP-25", confidence: "hypothesized" },
+      { text: "Topical formulations aim to reduce muscle microcontractions and dynamic wrinkle depth", confidence: "hypothesized" }
+    ],
+    studies: {
+      human: [{ title: "Topical Argireline in cosmetic studies", summary: "Small topical trials report modest reduction in wrinkle appearance with Argireline-containing formulations, though independent clinical evidence is limited.", outcome: "mixed", citation: "Cosmetic peptide studies", pubmed: "https://pubmed.ncbi.nlm.nih.gov/?term=Argireline" }],
+      animal: [],
+      vitro: [{ title: "Argireline reduces acetylcholine release in neuronal models", summary: "In vitro studies show reduced neurotransmitter release consistent with the proposed SNARE interference mechanism.", outcome: "positive", citation: "Preclinical SNARE peptide research", pubmed: "https://pubmed.ncbi.nlm.nih.gov/?term=Argireline" }],
+      anecdotal: [{ title: "Cosmetic user reports", summary: "Many users report temporary smoothness and reduced expression lines after sustained topical application. These outcomes are subjective and vary widely.", outcome: "neutral" }]
+    },
+    effects: ["Reduced dynamic wrinkle appearance with topical use", "Improved skin smoothness in some cosmetic formulations"],
+    sideEffects: ["Local skin irritation, redness, or allergic dermatitis", "No evidence for systemic benefits beyond surface appearance"],
+    legal: { fda: "Not approved as a drug. Used in cosmetic products.", prescription: "Available over the counter in cosmetic products", classification: "Cosmeceutical peptide", sports: "Not prohibited by WADA" },
+    evidenceScore: { human: "Low", mechanism: "Low", safety: "Medium" },
+    misconceptions: [{ myth: "Argireline acts like Botox when applied topically", correction: "Argireline is a topical cosmetic peptide with a different mechanism and far lower biological potency than botulinum toxin." }],
+    references: [{ text: "PubMed search: Argireline", url: "https://pubmed.ncbi.nlm.nih.gov/?term=Argireline" }]
+  },
+
+  {
+    id: "matrixyl-3000",
+    name: "Matrixyl 3000",
+    aliases: ["Matrixyl 3000", "Palmitoyl Oligopeptide"],
+    categories: ["skin", "recovery"],
+    classification: "Topical peptide complex",
+    whatItIs: "Matrixyl 3000 is a branded skin care peptide complex containing palmitoyl tripeptide-1 and palmitoyl tetrapeptide-7. It is marketed for collagen stimulation, reduced wrinkle depth, and improved skin texture in topical cosmetic products.",
+    mechanism: [
+      { text: "Palmitoylated peptides are proposed to mimic extracellular matrix fragments and stimulate fibroblast collagen synthesis", confidence: "hypothesized" },
+      { text: "May modulate local inflammation and matrix remodeling through growth factor pathways", confidence: "hypothesized" }
+    ],
+    studies: {
+      human: [{ title: "Palmitoyl peptide cosmetic trials", summary: "Small topical studies with Matrixyl-containing products reported modest improvement in fine lines and skin texture, though results are variable and independently replicated data is limited.", outcome: "mixed", citation: "Cosmetic peptide trials", pubmed: "https://pubmed.ncbi.nlm.nih.gov/?term=Palmitoyl+tetrapeptide-7" }],
+      animal: [],
+      vitro: [{ title: "Matrixyl peptides stimulate human dermal fibroblasts", summary: "In vitro assays demonstrate increased procollagen synthesis in fibroblast cultures treated with palmitoyl peptides.", outcome: "positive", citation: "In vitro collagen synthesis studies", pubmed: "https://pubmed.ncbi.nlm.nih.gov/?term=Palmitoyl+tripeptide-1" }],
+      anecdotal: [{ title: "Topical cosmetic experiences", summary: "Users often describe smoother skin and improved hydration, but clinical evidence for structural anti-aging benefits remains weak.", outcome: "neutral" }]
+    },
+    effects: ["Topical improvement in fine lines and skin texture", "May support dermal collagen synthesis in vitro"],
+    sideEffects: ["Local irritation or sensitization from topical application", "No evidence for systemic or reconstructive effects"],
+    legal: { fda: "Not approved as a drug. Used in cosmetic products.", prescription: "OTC cosmetics", classification: "Cosmeceutical peptide", sports: "Not prohibited by WADA" },
+    evidenceScore: { human: "Low", mechanism: "Low", safety: "Medium" },
+    misconceptions: [{ myth: "Matrixyl 3000 can restore lost facial bone or structure", correction: "It is a cosmetic topical peptide complex intended for skin surface appearance, not for structural facial changes." }],
+    references: [{ text: "PubMed search: Palmitoyl tetrapeptide-7", url: "https://pubmed.ncbi.nlm.nih.gov/?term=Palmitoyl+tetrapeptide-7" }]
+  },
+
+  {
+    id: "snap-8",
+    name: "Snap-8",
+    aliases: ["Snap-8"],
+    categories: ["skin", "recovery"],
+    classification: "Topical anti-wrinkle peptide",
+    whatItIs: "Snap-8 is an eight-amino-acid peptide marketed in topical formulations to reduce facial expression lines by modulating neurotransmitter release. It is sold as a cosmetic peptide, not as a prescription systemic therapy.",
+    mechanism: [
+      { text: "Derived from the SNAP-25 protein sequence, it is proposed to interfere with SNARE complex assembly and reduce neurotransmitter-induced muscle microcontractions", confidence: "hypothesized" },
+      { text: "Topical delivery limits systemic exposure and relies on skin penetration delivery technology", confidence: "hypothesized" }
+    ],
+    studies: {
+      human: [{ title: "Topical SNAP-8 cosmetic outcomes", summary: "Small cosmetic studies suggest modest reductions in expression lines with Snap-8-containing creams, but evidence is not robust.", outcome: "mixed", citation: "Cosmetic peptide reports", pubmed: "https://pubmed.ncbi.nlm.nih.gov/?term=Snap-8" }],
+      animal: [],
+      vitro: [],
+      anecdotal: [{ title: "User cosmetic reports", summary: "Some consumers note temporary smoothing of the forehead and crow's feet after consistent use.", outcome: "neutral" }]
+    },
+    effects: ["Temporary reduction in expression line appearance", "Improved skin smoothness with topical application"],
+    sideEffects: ["Possible local irritation or dermatitis", "No proven deep tissue or muscle paralysis effect"],
+    legal: { fda: "Not approved as a drug. Used in cosmetic products.", prescription: "OTC cosmetics", classification: "Cosmeceutical peptide", sports: "Not prohibited by WADA" },
+    evidenceScore: { human: "Low", mechanism: "Low", safety: "Medium" },
+    misconceptions: [{ myth: "Snap-8 is a topical alternative to Botox", correction: "Snap-8 is a cosmetic peptide with weak topical effects. It cannot replicate the neuromuscular blockade of botulinum toxin." }],
+    references: [{ text: "PubMed search: Snap-8", url: "https://pubmed.ncbi.nlm.nih.gov/?term=Snap-8" }]
+  },
+
+  {
+    id: "vilon",
+    name: "Vilon",
+    aliases: ["Vilon"],
+    categories: ["longevity", "recovery"],
+    classification: "Experimental regulatory peptide",
+    whatItIs: "Vilon is a dipeptide discussed in longevity and regenerative medicine circles for its purported effects on neuroendocrine regulation and stress resilience. Public data are extremely limited, and it is best regarded as a research peptide rather than an established therapeutic.",
+    mechanism: [
+      { text: "Proposed to modulate hypothalamic-pituitary signaling and immune response, but mechanisms are poorly characterized", confidence: "hypothesized" },
+      { text: "Claims are largely based on early-stage preclinical or theoretical literature rather than robust human trials", confidence: "hypothesized" }
+    ],
+    studies: {
+      human: [],
+      animal: [],
+      vitro: [],
+      anecdotal: [{ title: "Underground longevity peptide discussion", summary: "Vilon is primarily circulated in research peptide forums without well-defined clinical evidence.", outcome: "neutral" }]
+    },
+    effects: ["Claims of improved stress handling and sleep quality, but no validated human evidence", "Potential regulatory modulation in animal or in vitro models remains speculative"],
+    sideEffects: ["Unknown safety profile in humans", "Potential immune or hormonal dysregulation", "Lack of controlled dose-ranging studies"],
+    legal: { fda: "Not approved; research compound only", prescription: "Not legally available for clinical human use outside research", classification: "Research peptide", sports: "Prohibited under WADA S0" },
+    evidenceScore: { human: "None", mechanism: "Low", safety: "None" },
+    misconceptions: [{ myth: "Vilon is a validated anti-aging therapy", correction: "There is no clinical evidence in humans. Most claims are anecdotal or based on speculative marketing." }],
+    references: [{ text: "PubMed search: Vilon peptide", url: "https://pubmed.ncbi.nlm.nih.gov/?term=Vilon+peptide" }]
+  },
+
+  {
+    id: "hexamin",
+    name: "Hexamin",
+    aliases: ["Hexamin"],
+    categories: ["performance", "recovery"],
+    classification: "Experimental peptide research compound",
+    whatItIs: "Hexamin is an experimental peptide chain described in some cardiovascular and regenerative medicine discussions. Public scientific documentation is sparse, and it should be treated as a research compound with unknown human effects.",
+    mechanism: [
+      { text: "Proposed to support vascular or regenerative signaling pathways, but detailed mechanisms remain unverified in peer-reviewed human literature", confidence: "hypothesized" }
+    ],
+    studies: {
+      human: [],
+      animal: [],
+      vitro: [],
+      anecdotal: [{ title: "Research peptide forum reports", summary: "Hexamin appears as an emerging peptide with experimental claims, but there is no established clinical research on its efficacy or safety.", outcome: "neutral" }]
+    },
+    effects: ["No validated human effects; any reported outcomes remain anecdotal"],
+    sideEffects: ["Unknown safety profile", "Potential for immune or cardiovascular instability", "Risks from unregulated supply chains"],
+    legal: { fda: "Not approved; research compound only", prescription: "Not available as a clinical therapeutic", classification: "Research peptide", sports: "Prohibited under WADA S0" },
+    evidenceScore: { human: "None", mechanism: "Low", safety: "None" },
+    misconceptions: [{ myth: "Hexamin is a proven cardio-regenerative therapy", correction: "Public evidence is lacking. Hexamin remains an experimental peptide with no validated human trials." }],
+    references: [{ text: "PubMed search: Hexamin", url: "https://pubmed.ncbi.nlm.nih.gov/?term=Hexamin" }]
+  },
+
+  {
+    id: "thymopentin",
+    name: "Thymopentin",
+    aliases: ["TP-5", "Thymopentin"],
+    categories: ["immune", "longevity"],
+    classification: "Synthetic immunomodulatory peptide",
+    whatItIs: "Thymopentin is a synthetic pentapeptide analog of a biologically active fragment of thymopoietin. It has been studied for immune modulation and is used in some countries for conditions associated with T-cell dysfunction.",
+    mechanism: [
+      { text: "Mimics the active core of thymopoietin and may support T-cell maturation and function", confidence: "hypothesized" },
+      { text: "May normalize cytokine balance and improve immune responses in selected patient populations", confidence: "hypothesized" }
+    ],
+    studies: {
+      human: [{ title: "Thymopentin and immune markers", summary: "Small clinical studies reported improvements in T-cell subsets and immune markers in elderly or immunocompromised subjects, but broad efficacy remains unclear.", outcome: "mixed", citation: "Early immunology peptide trials", pubmed: "https://pubmed.ncbi.nlm.nih.gov/?term=Thymopentin" }],
+      animal: [],
+      vitro: [],
+      anecdotal: [{ title: "Immune support peptide discussion", summary: "Thymopentin is discussed by some longevity and immune optimization communities, but data are limited and often not replicated.", outcome: "neutral" }]
+    },
+    effects: ["Potential improvement in T-cell function and immune markers in select groups", "Claims of immune normalization and longevity-support are unproven"],
+    sideEffects: ["Injection site reactions", "Unknown long-term safety in healthy humans", "Potential immune dysregulation with chronic use"],
+    legal: { fda: "Not approved in the U.S.", prescription: "Research or prescription in limited jurisdictions", classification: "Investigational peptide", sports: "Prohibited under WADA S0" },
+    evidenceScore: { human: "Low", mechanism: "Low", safety: "Low" },
+    misconceptions: [{ myth: "Thymopentin is a broadly validated immune booster for healthy adults", correction: "Clinical evidence is limited to small studies in specific patient groups. Healthy adults should not assume broad immune enhancement." }],
+    references: [{ text: "PubMed search: Thymopentin", url: "https://pubmed.ncbi.nlm.nih.gov/?term=Thymopentin" }]
+  },
+
+  {
+    id: "splenopentin",
+    name: "Splenopentin",
+    aliases: ["SP-5", "Splenopentin"],
+    categories: ["immune", "longevity"],
+    classification: "Experimental immunomodulatory peptide",
+    whatItIs: "Splenopentin is a pentapeptide derived from spleen extracts that has been discussed as a potential immunomodulator. Public research is limited and its clinical utility remains largely unconfirmed.",
+    mechanism: [
+      { text: "Proposed to influence lymphocyte function and cytokine secretion, but direct mechanisms are not well established in human studies", confidence: "hypothesized" }
+    ],
+    studies: {
+      human: [],
+      animal: [],
+      vitro: [],
+      anecdotal: [{ title: "Research peptide discussions", summary: "Splenopentin remains largely a research compound in immunology forums, without strong clinical evidence for safety or efficacy.", outcome: "neutral" }]
+    },
+    effects: ["No validated effects in healthy humans", "Claims of immune balancing remain speculative"],
+    sideEffects: ["Unknown safety profile", "Potential immune perturbation", "Risks from unregulated peptide sources"],
+    legal: { fda: "Not approved; research compound only", prescription: "Not a standard medical product", classification: "Research peptide", sports: "Prohibited under WADA S0" },
+    evidenceScore: { human: "None", mechanism: "Low", safety: "None" },
+    misconceptions: [{ myth: "Splenopentin is an evidence-backed immune regulator", correction: "There is no robust public clinical evidence to support broad immune claims for Splenopentin." }],
+    references: [{ text: "PubMed search: Splenopentin", url: "https://pubmed.ncbi.nlm.nih.gov/?term=Splenopentin" }]
+  },
+
+  {
+    id: "leptin",
+    name: "Leptin",
+    aliases: ["Leptin"],
+    categories: ["metabolism", "performance", "longevity"],
+    classification: "Endogenous metabolic hormone",
+    whatItIs: "Leptin is an adipose-derived hormone that regulates appetite, energy expenditure, and neuroendocrine function. Pharmacological leptin replacement is approved for congenital leptin deficiency and some lipodystrophy syndromes, but its benefits in common obesity are limited by leptin resistance.",
+    mechanism: [
+      { text: "Binds leptin receptors in the hypothalamus to suppress appetite and increase energy expenditure", confidence: "established" },
+      { text: "Modulates neuroendocrine axes including thyroid, reproductive, and growth hormone pathways", confidence: "established" }
+    ],
+    studies: { human: [{ title: "Leptin treatment in leptin-deficient humans", summary: "Recombinant leptin normalized appetite, body composition, and metabolic function in patients with congenital leptin deficiency. Common obesity shows far smaller effects due to leptin resistance.", outcome: "positive", citation: "Farooqi IS et al. (2002). N Engl J Med. 346(20): 1483–1485.", pubmed: "https://pubmed.ncbi.nlm.nih.gov/12075066" }], animal: [], vitro: [], anecdotal: [{ title: "Weight management discussions", summary: "Leptin is frequently discussed in metabolic optimization communities, with caution that most obese individuals are leptin-resistant.", outcome: "neutral" }] },
+    effects: ["Appetite suppression and energy balance regulation in leptin-deficient states", "Limited weight loss in common obesity due to leptin resistance"],
+    sideEffects: ["Injection site reactions", "Potential immunogenicity with recombinant protein", "Rare hypoglycemia in insulin-sensitive patients"],
+    legal: { fda: "Approved for congenital leptin deficiency and certain lipodystrophy syndromes", prescription: "Prescription only", classification: "Prescription biologic", sports: "Prohibited under WADA S2" },
+    evidenceScore: { human: "Medium", mechanism: "High", safety: "Medium" },
+    misconceptions: [{ myth: "Leptin injections are an effective weight loss drug for everyone", correction: "Most obese individuals are leptin-resistant, so exogenous leptin has limited efficacy outside select deficiency or lipodystrophy cases." }],
+    references: [{ text: "Farooqi IS et al. (2002). Leptin treatment in congenital leptin deficiency. N Engl J Med.", url: "https://pubmed.ncbi.nlm.nih.gov/12075066" }]
+  },
+
+  {
+    id: "pramlintide",
+    name: "Pramlintide",
+    aliases: ["Pramlintide"],
+    categories: ["metabolism", "performance"],
+    classification: "Synthetic amylin analogue / prescription drug",
+    whatItIs: "Pramlintide is a synthetic amylin analogue approved for adjunctive use in type 1 and type 2 diabetes to reduce postprandial glucose excursions. It slows gastric emptying, suppresses glucagon, and increases satiety.",
+    mechanism: [
+      { text: "Mimics amylin signaling in the brain and gastrointestinal tract to slow gastric emptying and reduce postprandial glucagon release", confidence: "established" },
+      { text: "Enhances satiety through central nervous system pathways", confidence: "established" }
+    ],
+    studies: { human: [{ title: "Pramlintide improves glycemic control in insulin-treated diabetes", summary: "Randomized trials showed pramlintide reduced postprandial glucose and body weight in type 1 and 2 diabetes, with gastrointestinal side effects as the main limitation.", outcome: "positive", citation: "Amylin Study Group (2002). Diabetes Care. 25(2): 259–266.", pubmed: "https://pubmed.ncbi.nlm.nih.gov/?term=Pramlintide" }], animal: [], vitro: [], anecdotal: [{ title: "Diabetes and weight loss discussions", summary: "Pramlintide is discussed in metabolic optimization communities for its appetite-suppressive properties, but it is only approved for insulin-treated diabetes.", outcome: "neutral" }] },
+    effects: ["Reduced postprandial hyperglycemia", "Increased satiety and modest weight loss in diabetes trials"],
+    sideEffects: ["Nausea and vomiting", "Hypoglycemia when combined with insulin", "Injection site reactions"],
+    legal: { fda: "FDA approved for diabetes adjunctive therapy", prescription: "Prescription only", classification: "Prescription peptide drug", sports: "Prohibited under WADA S2" },
+    evidenceScore: { human: "High", mechanism: "High", safety: "Medium" },
+    misconceptions: [{ myth: "Pramlintide is a general weight loss drug for healthy people", correction: "Pramlintide is approved for insulin-treated diabetes and carries risks of hypoglycemia and nausea. Its use outside the indicated population is not supported." }],
+    references: [{ text: "Amylin Study Group (2002). Pramlintide in diabetes care. Diabetes Care.", url: "https://pubmed.ncbi.nlm.nih.gov/?term=Pramlintide" }]
+  },
+
+  {
     id: "foxo4-dri",
     name: "FOXO4-DRI",
     aliases: ["FOXO4-p53 interfering peptide", "Senolytic peptide"],

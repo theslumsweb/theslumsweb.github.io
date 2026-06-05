@@ -27,6 +27,7 @@
           <div class="nav-links" role="tablist" aria-label="Site sections">
             <button type="button" class="nav-link active" data-nav="compounds" id="navCompounds">Compounds</button>
             <button type="button" class="nav-link" data-nav="surgeries" id="navSurgeries">Surgeries</button>
+            <button type="button" class="nav-link" data-nav="surgeons" id="navSurgeons">Surgeons</button>
             <button type="button" class="nav-link" data-nav="softmax" id="navSoftmax">Forums</button>
             <button type="button" class="nav-link" data-nav="tools" id="navTools">Tools</button>
             <button type="button" class="nav-link" data-nav="changelog" id="navChangelog">Changelog</button>
@@ -53,6 +54,11 @@
   </nav>
 
   <!-- COMPOUNDS HOME -->
+  <div class="top-counters" id="siteCounters" style="padding:8px 16px;display:flex;gap:12px;align-items:center;justify-content:flex-end;">
+    <div class="top-counter">Compounds: <span id="topCompoundCount">0</span></div>
+    <div class="top-counter">Surgeries: <span id="topSurgeryCount">0</span></div>
+    <div class="top-counter">Surgeons: <span id="topSurgeonCount">0</span></div>
+  </div>
   <div id="homeView" class="view active">
     <div class="hero">
       <div class="hero-label">Compound notes</div>
@@ -63,6 +69,14 @@
         <input type="text" id="searchInput" class="search-input" placeholder="Search compounds, aliases, pathways, typos…" autocomplete="off" />
         <span class="search-icon">⌕</span>
         <div class="search-results" id="searchResults"></div>
+      </div>
+      <div class="pathway-chip-row" id="pathwayFilterChips">
+        <span class="pathway-filter-label">Filter by pathway:</span>
+        <button type="button" class="pathway-chip" data-pathway="IGF-1 ↑">IGF-1 ↑</button>
+        <button type="button" class="pathway-chip" data-pathway="mTORC1 ↑">mTORC1 ↑</button>
+        <button type="button" class="pathway-chip" data-pathway="Androgen Receptor">Androgen Receptor</button>
+        <button type="button" class="pathway-chip" data-pathway="GLP-1 ↑">GLP-1 ↑</button>
+        <button type="button" class="pathway-chip" data-pathway="AMPK ↑">AMPK ↑</button>
       </div>
 
       <section class="global-notes-block" aria-labelledby="globalNotesLabel">
@@ -94,6 +108,26 @@
           <div class="cat-icon">◉</div>
           <div class="cat-name">Recovery</div>
           <div class="cat-count" id="count-recovery">0</div>
+        </button>
+        <button class="cat-card" data-cat="hair">
+          <div class="cat-icon">◈</div>
+          <div class="cat-name">Hair</div>
+          <div class="cat-count" id="count-hair">0</div>
+        </button>
+        <button class="cat-card" data-cat="peptides">
+          <div class="cat-icon">◎</div>
+          <div class="cat-name">Peptides</div>
+          <div class="cat-count" id="count-peptides">0</div>
+        </button>
+        <button class="cat-card" data-cat="looks">
+          <div class="cat-icon">◇</div>
+          <div class="cat-name">Looks / Skin</div>
+          <div class="cat-count" id="count-looks">0</div>
+        </button>
+        <button class="cat-card" data-cat="hormones">
+          <div class="cat-icon">◉</div>
+          <div class="cat-name">Hormones</div>
+          <div class="cat-count" id="count-hormones">0</div>
         </button>
         <button class="cat-card" data-cat="longevity">
           <div class="cat-icon">⬡</div>
@@ -169,6 +203,31 @@
     <div id="surgeryDetailContent"></div>
   </div>
 
+  <div id="surgeonsView" class="view">
+    <div class="hero hero--compact">
+      <div class="hero-label">Surgeon atlas</div>
+      <h1 class="hero-title hero-title--sm">Find specialists, compare focus areas</h1>
+      <p class="hero-sub">Search by surgeon, procedure, or region. Always verify credentials and consultation availability directly with the clinic.</p>
+      <div class="search-wrap">
+        <input type="text" id="surgeonSearchInput" class="search-input" placeholder="Search surgeons, procedures, locations…" autocomplete="off" />
+        <span class="search-icon">⌕</span>
+      </div>
+      <div class="surgeon-filter-row" id="surgeonRegionFilters"></div>
+    </div>
+    <section class="compound-section">
+      <div class="compound-section-header">
+        <div class="section-label" id="surgeonListLabel">All surgeons</div>
+        <button class="clear-filter" id="surgeonClearType" style="display:none;">✕ Clear filters</button>
+      </div>
+      <div class="compound-grid surgeon-grid" id="surgeonGrid"></div>
+    </section>
+  </div>
+
+  <div id="surgeonDetailView" class="view">
+    <button class="back-btn" id="backBtnSurgeon">← Back to surgeons</button>
+    <div id="surgeonDetailContent"></div>
+  </div>
+
   <!-- TOOLS -->
   <div id="toolsView" class="view">
     <div class="hero hero--compact">
@@ -218,6 +277,48 @@
         <button type="button" class="tool-run-btn" id="toolReconRun">Compute</button>
         <div class="tool-out" id="toolReconOut" role="status"></div>
       </section>
+
+      <section class="detail-section tool-card" aria-labelledby="tool-metric-title">
+        <div class="ds-label">Facial metrics</div>
+        <div class="ds-title" id="tool-metric-title">Facial Metric Calculator</div>
+        <p class="ds-lead">Estimate facial proportion metrics and see which surgeries may address out-of-range values.</p>
+        <div class="tool-fields">
+          <label class="tool-field"><span>Facial width (mm)</span><input type="number" id="toolFaceWidth" min="50" max="220" step="0.1" placeholder="e.g. 140" /></label>
+          <label class="tool-field"><span>Upper face height (mm)</span><input type="number" id="toolUpperFace" min="30" max="120" step="0.1" placeholder="e.g. 65" /></label>
+          <label class="tool-field"><span>Lower face height (mm)</span><input type="number" id="toolLowerFace" min="30" max="120" step="0.1" placeholder="e.g. 60" /></label>
+          <label class="tool-field"><span>Bigonial width (mm)</span><input type="number" id="toolBigonialWidth" min="50" max="220" step="0.1" placeholder="e.g. 110" /></label>
+          <label class="tool-field"><span>Bizygomatic width (mm)</span><input type="number" id="toolBizygomaticWidth" min="50" max="220" step="0.1" placeholder="e.g. 135" /></label>
+          <label class="tool-field"><span>Chin height (mm)</span><input type="number" id="toolChinHeight" min="10" max="80" step="0.1" placeholder="e.g. 45" /></label>
+        </div>
+        <button type="button" class="tool-run-btn" id="toolMetricRun">Analyze</button>
+        <div class="tool-out tool-out--wide" id="toolMetricOut" role="status"></div>
+      </section>
+
+      <section class="detail-section tool-card" aria-labelledby="tool-stack-title">
+        <div class="ds-label">Stack planning</div>
+        <div class="ds-title" id="tool-stack-title">Stack Builder / Interaction Checker</div>
+        <p class="ds-lead">Build a compound stack and surface known interaction flags.</p>
+        <div class="tool-fields">
+          <label class="tool-field"><span>Add compound</span><input type="text" id="toolStackInput" list="toolStackList" autocomplete="off" placeholder="Start typing compound name…" /></label>
+          <datalist id="toolStackList"></datalist>
+        </div>
+        <button type="button" class="tool-run-btn" id="toolStackAdd">Add to stack</button>
+        <div class="tool-out tool-out--wide" id="toolStackOut" role="status"></div>
+      </section>
+
+      <section class="detail-section tool-card" aria-labelledby="tool-unit-title">
+        <div class="ds-label">Dose conversion</div>
+        <div class="ds-title" id="tool-unit-title">Dosing Unit Converter</div>
+        <p class="ds-lead">Convert between mcg, mg, IU, nmol, and pmol with some common peptide references.</p>
+        <div class="tool-fields">
+          <label class="tool-field"><span>Amount</span><input type="number" id="toolUnitValue" min="0" step="0.001" placeholder="e.g. 500" /></label>
+          <label class="tool-field"><span>From unit</span><select id="toolUnitFrom"><option value="mcg">mcg</option><option value="mg">mg</option><option value="iu">IU</option><option value="nmol">nmol</option><option value="pmol">pmol</option></select></label>
+          <label class="tool-field"><span>To unit</span><select id="toolUnitTo"><option value="mcg">mcg</option><option value="mg">mg</option><option value="iu">IU</option><option value="nmol">nmol</option><option value="pmol">pmol</option></select></label>
+          <label class="tool-field"><span>Compound</span><select id="toolUnitCompound"><option value="generic">Generic</option><option value="bpc-157">BPC-157</option><option value="tb-500">TB-500</option><option value="gh">GH</option><option value="insulin">Insulin</option></select></label>
+        </div>
+        <button type="button" class="tool-run-btn" id="toolUnitRun">Convert</button>
+        <div class="tool-out tool-out--wide" id="toolUnitOut" role="status"></div>
+      </section>
     </div>
   </div>
 
@@ -233,11 +334,20 @@
       <div class="ds-label">Latest</div>
       <div class="ds-title">Current release</div>
       <ul class="forum-list">
-        <li>Deep links for compounds and surgeries.</li>
-        <li>Improved search with nickname and typo matching.</li>
-        <li>New inhibition-lowering category and entries.</li>
-        <li>Tools page (BMI, cycle planner, reconstitution).</li>
-        <li>Per-page edit requests via Web3Forms dialog.</li>
+        <li>added a counter of surgeries, surgeons and peptides</li>
+        <li>added surgeons (thank you insignia!!!! his acc: <a href="https://schaduw.net/members/insignia.206/" target="_blank" rel="noopener noreferrer">https://schaduw.net/members/insignia.206/</a>)</li>
+        <li>added schaduw in the forum list</li>
+        <li>added new compounds, we went up from 200 to 600 peptides(thank you Mate for helping!!!)</li>
+      </ul>
+    </section>
+
+    <section class="detail-section changelog-mini">
+      <div class="ds-label">Todo</div>
+      <div class="ds-title">Next updates</div>
+      <ul class="forum-list">
+        <li>add more compounds</li>
+        <li>add more surgeries and surgeons</li>
+        <li>start working on different themes</li>
       </ul>
     </section>
 
@@ -266,6 +376,7 @@
       <div class="section-label">Looksmaxxing &amp; related</div>
       <ul class="forum-list">
         <li><a href="https://looksmax.org/" target="_blank" rel="noopener noreferrer">Looksmax.org</a></li>
+        <li><a href="https://schaduw.net/" target="_blank" rel="noopener noreferrer">Schaduw.net</a></li>
         <li><a href="https://forum.looksmaxxing.com/" target="_blank" rel="noopener noreferrer">Looksmaxxing Forum</a></li>
         <li><a href="https://looksmax.cc/" target="_blank" rel="noopener noreferrer">Looksmax.cc</a></li>
         <li><a href="https://lookism.net/" target="_blank" rel="noopener noreferrer">Lookism.net</a></li>
@@ -414,9 +525,11 @@
   <script src="batch5.js"></script>
   <script src="batch6.js"></script>
   <script src="batch7.js"></script>
+  <script src="batch8.js"></script>
   <script src="batch-inhibition.js"></script>
   <script src="compounds_nicknames_data.js"></script>
   <script src="hardmaxxing-data.js"></script>
+  <script src="surgeons-data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
