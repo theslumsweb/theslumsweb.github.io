@@ -6,17 +6,326 @@ const HARDMAXXING_LIST =
     ? HARDMAXXING_SECTIONS
     : [];
 
-const COMPOUNDS = [
-  ...NEW_COMPOUNDS_1,
-  ...NEW_COMPOUNDS_2,
-  ...NEW_COMPOUNDS_3,
-  ...NEW_COMPOUNDS_4,
-  ...NEW_COMPOUNDS_5,
-  ...NEW_COMPOUNDS_6,
-  ...NEW_COMPOUNDS_7,
-  ...NEW_COMPOUNDS_8,
-  ...(typeof NEW_COMPOUNDS_INHIBITION !== "undefined" && Array.isArray(NEW_COMPOUNDS_INHIBITION) ? NEW_COMPOUNDS_INHIBITION : []),
-];
+function normalizeSurgeonText(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\bthe\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function findProcedureIdFromName(name) {
+  const target = normalizeSurgeonText(name);
+  if (!target) return null;
+
+  const aliasMap = {
+    bimax: "1-2-bimaxillary-osteotomy",
+    bimaxillary: "1-2-bimaxillary-osteotomy",
+    bssso: "1-3-mandibular-osteotomies",
+    lowerjaw: "1-3-mandibular-osteotomies",
+    genioplasty: "1-4-genioplasty",
+    chin: "1-4-genioplasty",
+    jaw: "1-5-ramus-and-jaw-angle-procedures",
+    jawangle: "1-5-ramus-and-jaw-angle-procedures",
+    zygoma: "2-1-zygomatic-osteotomy",
+    cheek: "2-2-malar-augmentation",
+    malar: "2-2-malar-augmentation",
+    orbital: "3-1-orbital-box-osteotomy",
+    blepharoplasty: "3-3-blepharoplasty",
+    eyelid: "3-3-blepharoplasty",
+    rhinoplasty: "4-1-rhinoplasty-types",
+    septorhinoplasty: "4-1-rhinoplasty-types",
+    facelift: "5-2-deep-plane-facelift",
+    deepplane: "5-2-deep-plane-facelift",
+    hairtransplant: "6-1-hair-transplant-methods",
+    hairline: "6-2-hairline-lowering-and-restoration",
+    implant: "2-2-malar-augmentation",
+    augmentation: "2-2-malar-augmentation",
+    reduction: "2-1-zygomatic-osteotomy",
+    tmj: "1-3-mandibular-osteotomies",
+    brow: "3-4-brow-lift-and-eyebrow-work",
+    browlift: "3-4-brow-lift-and-eyebrow-work",
+    otoplasty: "5-4-ear-surgery-and-otoplasty",
+    lip: "5-3-lip-lift-and-perioral-enhancement",
+    fatgrafting: "2-3-facial-fat-grafting",
+    fat: "2-3-facial-fat-grafting",
+  };
+
+  for (const [key, id] of Object.entries(aliasMap)) {
+    if (target.includes(key)) return id;
+  }
+
+  const scored = HARDMAXXING_LIST
+    .map((item) => {
+      const title = normalizeSurgeonText(item.title);
+      const content = normalizeSurgeonText(item.content);
+      const hay = `${title} ${content}`;
+      const overlap = target.split(/\s+/).filter((word) => word.length >= 3 && hay.includes(word)).length;
+      const titleScore = title === target ? 8 : title.includes(target) || target.includes(title) ? 6 : 0;
+      const idScore = normalizeSurgeonText(item.id).includes(target) || target.includes(normalizeSurgeonText(item.id)) ? 4 : 0;
+      return { item, score: overlap + titleScore + idScore };
+    })
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  return scored[0]?.item?.id || null;
+}
+
+function normalizeSurgeonRecord(raw) {
+  const location = raw.location || {
+    city: raw.city || "",
+    state: raw.state || raw.region || raw.country || "",
+    country: raw.country || "",
+  };
+
+  const procedureNames = Array.isArray(raw.procedures)
+    ? raw.procedures.map((item) => (typeof item === "string" ? item : item?.name)).filter(Boolean)
+    : [];
+
+  const procedureIds = procedureNames.map((name) => findProcedureIdFromName(name) || name);
+
+  return {
+    ...raw,
+    id: raw.id || raw.slug || "",
+    name: raw.name || "Unknown surgeon",
+    title: raw.title || raw.clinic || "Surgeon profile",
+    clinic: raw.clinic || "",
+    clinicUrl: raw.clinicUrl || raw.contact?.website || "",
+    location,
+    specialties: Array.isArray(raw.specialties) && raw.specialties.length
+      ? raw.specialties
+      : procedureNames.slice(0, 6),
+    procedures: procedureIds,
+    approach: raw.approach || (Array.isArray(raw.notes) ? raw.notes.join(" ") : raw.notes) || "No approach summary available yet.",
+    forumReputation: raw.forumReputation || (raw.ratingCount ? "high" : "unknown"),
+    patientThreads: Array.isArray(raw.patientThreads) ? raw.patientThreads : [],
+    notes: Array.isArray(raw.notes) ? raw.notes.join(" ") : raw.notes || "",
+    anonymous: Boolean(raw.anonymous),
+  };
+}
+
+const SURGEONS_DATA = (() => {
+  const source =
+    typeof window !== "undefined" && Array.isArray(window.SURGEONS) && window.SURGEONS.length
+      ? window.SURGEONS
+      : typeof globalThis !== "undefined" && Array.isArray(globalThis.SURGEONS_DATA)
+        ? globalThis.SURGEONS_DATA
+        : [];
+
+  return source.map((item) => normalizeSurgeonRecord(item));
+})();
+
+const COMPOUND_FORM_SUFFIXES =
+  /\b(base|derivative|derivatives|ester|esters|compound|compounds|acid|salts?|acetate|propionate|phenylpropionate|cypionate|enanthate|decanoate|undecanoate|isocaproate|heptanoate|caproate|isobutyrate|butyrate|valerate|laurate|stearate|cyclohexylpropionate|undecylenate|hexahydrobenzylcarbonate|citrate|hydrochloride|hcl|sulfate|oral|injectable|depot|peptide|full)\b/gi;
+
+const COMPOUND_FAMILY_ALIASES = {
+  masteron: "drostanolone",
+  equipoise: "boldenone",
+  primobolan: "methenolone",
+  winstrol: "stanozolol",
+  anavar: "oxandrolone",
+  clomid: "clomiphene",
+  arimidex: "anastrozole",
+  dostinex: "cabergoline",
+  aromasin: "exemestane",
+  halotestin: "fluoxymesterone",
+  proviron: "mesterolone",
+  salbutamol: "albuterol",
+  madol: "desoxymethyltestosterone",
+  deca: "nandrolone",
+  npp: "nandrolone",
+  tbol: "chlorodehydromethyltestosterone",
+  metribolone: "methyltrienolone",
+  ibutamoren: "mk 677",
+  zadaxin: "thymosin alpha 1",
+  salbutamol: "albuterol",
+  "ss 31": "elamipretide",
+};
+
+function tokenizeCompoundFamily(raw) {
+  return String(raw || "")
+    .toLowerCase()
+    .replace(/\s*\([^)]*\)/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(COMPOUND_FORM_SUFFIXES, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeCompoundFamilyKey(item) {
+  const candidates = [item?.name, item?.id, ...(item?.aliases || [])]
+    .map(tokenizeCompoundFamily)
+    .filter(Boolean);
+
+  let key = candidates.sort((a, b) => a.length - b.length)[0] || "";
+  if (!key) return "";
+
+  for (const [alias, canonical] of Object.entries(COMPOUND_FAMILY_ALIASES)) {
+    if (key === alias || key.startsWith(`${alias} `) || key.endsWith(` ${alias}`) || key.includes(` ${alias} `)) {
+      key = canonical;
+      break;
+    }
+  }
+
+  return key;
+}
+
+function compoundDedupePriority(item) {
+  const name = String(item?.name || "");
+  const hasEster = /\b(acetate|propionate|cypionate|enanthate|decanoate|undecanoate|phenylpropionate|undecylenate|hexahydrobenzylcarbonate|citrate|isocaproate)\b/i.test(
+    name
+  );
+  const hasParen = /\([^)]+\)/.test(name);
+  const hasForm = /\b(oral|injectable|depot)\b/i.test(name);
+  return (hasEster ? 10 : 0) + (hasParen ? 5 : 0) + (hasForm ? 3 : 0) + name.length * 0.01;
+}
+
+function dedupeCompounds(list) {
+  const seen = new Set();
+  const unique = [];
+
+  for (const item of [...list].sort((a, b) => compoundDedupePriority(a) - compoundDedupePriority(b))) {
+    const key = normalizeCompoundFamilyKey(item);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    unique.push(item);
+  }
+
+  return unique;
+}
+
+const COMPOUND_CATEGORY_ORDER = {
+  "fat-loss": 1,
+  performance: 2,
+  recovery: 3,
+  peptides: 4,
+  hormones: 5,
+  cognition: 6,
+  longevity: 7,
+  skin: 8,
+  looks: 9,
+  hair: 10,
+  "inhibition-lowering": 11,
+};
+
+function isThinCompoundCopy(c) {
+  const w = String(c?.whatItIs || "").trim();
+  if (!w) return true;
+  if (/Primary mechanism\/class:/i.test(w)) return true;
+  if (/listed in the project compound inventory/i.test(w)) return true;
+  return false;
+}
+
+function applyCompoundMeta(list) {
+  const meta = typeof COMPOUND_META !== "undefined" && COMPOUND_META ? COMPOUND_META : {};
+  return list.map((c) => {
+    const m = meta[c.id];
+    let next = c;
+    if (m) {
+      if (!isThinCompoundCopy(c)) {
+        next = {
+          ...c,
+          cardSummary: c.cardSummary || m.cardSummary,
+          categories: normalizeCompoundCategories(c.categories || m.categories),
+        };
+      } else {
+        next = {
+          ...c,
+          categories: normalizeCompoundCategories(m.categories || c.categories),
+          classification: m.classification || c.classification,
+          whatItIs: m.whatItIs || c.whatItIs,
+          cardSummary: m.cardSummary || c.cardSummary,
+          mechanism: m.mechanism?.length ? m.mechanism : c.mechanism,
+          effects: m.effects?.length ? m.effects : c.effects,
+        };
+      }
+    }
+    return ensureCompoundDefaults(next);
+  });
+}
+
+function ensureCompoundDefaults(c) {
+  const name = c.name || "This compound";
+  const studies = c.studies || { human: [], animal: [], vitro: [], anecdotal: [] };
+  return {
+    ...c,
+    aliases: c.aliases || [],
+    categories: normalizeCompoundCategories(c.categories || []),
+    whatItIs: c.whatItIs || `${name} — overview still being expanded.`,
+    mechanism:
+      Array.isArray(c.mechanism) && c.mechanism.length
+        ? c.mechanism
+        : [{ text: "Mechanism details for this entry are still being filled in.", confidence: "hypothesized" }],
+    effects: c.effects || [],
+    sideEffects: c.sideEffects?.length ? c.sideEffects : ["Limited published evidence; safety is not established."],
+    studies: {
+      human: studies.human || [],
+      animal: studies.animal || [],
+      vitro: studies.vitro || [],
+      anecdotal: studies.anecdotal || [],
+    },
+    legal: c.legal || {
+      fda: "Regulatory status varies — verify with current FDA/EMA labeling or local law.",
+      prescription: "May require prescription or be unregulated depending on jurisdiction.",
+      classification: c.classification || "Unclassified / research-use",
+      sports: "Check WADA prohibited list for sport-specific status.",
+    },
+    misconceptions: Array.isArray(c.misconceptions) ? c.misconceptions : [],
+    references:
+      Array.isArray(c.references) && c.references.length
+        ? c.references
+        : [{ text: `PubMed search: ${name}`, url: `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(name)}` }],
+    pathways: c.pathways || [],
+    evidenceScore: c.evidenceScore || { human: "Low", mechanism: "Low", safety: "Low" },
+  };
+}
+
+function normalizeCompoundCategories(cats) {
+  const out = (cats || []).map((cat) => (cat === "peptide" ? "peptides" : cat));
+  return [...new Set(out.filter(Boolean))];
+}
+
+function compoundPrimarySortKey(c) {
+  const cats = normalizeCompoundCategories(c.categories);
+  let best = 99;
+  for (const cat of cats) {
+    const order = COMPOUND_CATEGORY_ORDER[cat] ?? 50;
+    if (order < best) best = order;
+  }
+  return best;
+}
+
+function sortCompoundsForDisplay(list) {
+  return [...list].sort((a, b) => {
+    const byCat = compoundPrimarySortKey(a) - compoundPrimarySortKey(b);
+    if (byCat !== 0) return byCat;
+    return String(a.name || "").localeCompare(String(b.name || ""), undefined, { sensitivity: "base" });
+  });
+}
+
+function compoundDisplayCategories(c) {
+  const cats = normalizeCompoundCategories(c.categories);
+  const functional = cats.filter((cat) => cat !== "peptides");
+  if (functional.length) return functional.slice(0, 3);
+  return cats.slice(0, 2);
+}
+
+const COMPOUNDS = sortCompoundsForDisplay(
+  applyCompoundMeta(
+    dedupeCompounds([
+      ...NEW_COMPOUNDS_1,
+      ...NEW_COMPOUNDS_2,
+      ...NEW_COMPOUNDS_3,
+      ...NEW_COMPOUNDS_4,
+      ...NEW_COMPOUNDS_5,
+      ...NEW_COMPOUNDS_6,
+      ...NEW_COMPOUNDS_7,
+      ...NEW_COMPOUNDS_8,
+      ...(typeof NEW_COMPOUNDS_INHIBITION !== "undefined" && Array.isArray(NEW_COMPOUNDS_INHIBITION) ? NEW_COMPOUNDS_INHIBITION : []),
+    ])
+  )
+);
 
 const THEME_KEY = "slums_theme";
 const BOOKMARK_KEYS = ["slums_bookmarks", "substrate_bookmarks"];
@@ -44,8 +353,6 @@ const COMPOUND_OVERRIDES = {
       "Cost, access, and insurance coverage constraints where not yet approved",
       "Requires monitoring as for other incretins (pancreatic/biliary symptoms, HR, drug interactions)",
     ],
-    communityNotes:
-      "Patients and clinicians on obesity medicine forums often describe retatrutide as subjectively ‘stronger’ or faster-acting for appetite suppression than semaglutide or tirzepatide, but individual responses vary and cross-trial comparisons are not the same as head-to-head experience. Expect hype to outrun personal tolerance.",
     studies: [
       {
         title: "Triple-Hormone-Receptor Agonist Retatrutide for Obesity (phase 2 dose-ranging trial)",
@@ -92,8 +399,6 @@ const COMPOUND_OVERRIDES = {
     ],
     pros: ["Large RCT evidence base", "Real-world prescribing experience", "Once-weekly injection (obesity formulation)"],
     cons: ["Nausea/vomiting", "Lean mass drops with the fat for some people (training + protein still matter)", "Cost/access"],
-    communityNotes:
-      "Patient forums are loud: lots of 'hunger just died' posts, but also reflux, fatigue, and people spiraling about 'Ozempic face'. All vibes/anecdotes, not proof of what happens to you.",
     studies: [
       {
         title: "STEP 1: semaglutide 2.4 mg and lifestyle intervention in obesity",
@@ -127,8 +432,6 @@ const COMPOUND_OVERRIDES = {
     recommendedFor: ["Obesity", "Type 2 diabetes", "Metabolic syndrome components under specialist care"],
     pros: ["Head-to-head data vs semaglutide in SURMOUNT-5", "Strong mean weight and HbA1c effects"],
     cons: ["GI tolerability", "Cost", "Injectable training and access"],
-    communityNotes:
-      "Boards love calling it 'stronger' than semaglutide for appetite. Trial averages lean that way for a lot of people, not everyone.",
     studies: [
       {
         title: "SURMOUNT-1: tirzepatide in obesity",
@@ -189,8 +492,10 @@ function saveBookmarks() {
 // ──────────────────────────────────────
 function collectStudiesRaw(c) {
   const out = [];
-  for (const bucket of ["human", "animal", "vitro", "anecdotal"]) {
-    for (const s of c.studies[bucket] || []) {
+  const studies = c.studies || {};
+  for (const bucket of ["human", "animal", "vitro"]) {
+    for (const s of studies[bucket] || []) {
+      if (/community|forum discussion|anecdotal/i.test(s.title || "")) continue;
       out.push({ ...s, _bucket: bucket });
     }
   }
@@ -206,6 +511,12 @@ function deriveRecommended(c) {
     longevity: "Aging-biology interest (often speculative)",
     performance: "Strength, endurance, or body-composition performance contexts",
     "inhibition-lowering": "Anxiety, spasticity, or related clinical contexts (prescription drugs; follow local law and medical guidance)",
+    peptides: "Peptide signaling, recovery, metabolism, or cosmetic goals (evidence varies sharply by sequence)",
+    peptide: "Peptide signaling, recovery, metabolism, or cosmetic goals (evidence varies sharply by sequence)",
+    hormones: "Hormone-axis modulation, fertility, TRT, or ancillary estrogen/DHT control",
+    "steroid-aas": "Anabolic-androgenic performance contexts (high risk; not medical advice)",
+    looks: "Appearance-oriented goals (tanning, libido, skin, etc.)",
+    hair: "Hair retention or regrowth contexts",
   };
   const lines = (c.categories || []).map((cat) => map[cat] || cat);
   lines.push("Check legality where you live and involve a clinician when decisions affect your health.");
@@ -232,17 +543,6 @@ function deriveSafety(c) {
     ? `Commonly noted concerns: ${se.join(" ")}`
     : "Assume elevated unknown risk for unapproved or grey-market agents.";
   return s;
-}
-
-function deriveCommunity(c) {
-  const an = c.studies?.anecdotal || [];
-  if (an.length) {
-    return an
-      .map((x) => x.summary)
-      .filter(Boolean)
-      .join(" ");
-  }
-  return "Online reports are mixed and unverified—use them only as weak context next to trials and professional advice.";
 }
 
 const GLP_CYCLING =
@@ -342,7 +642,6 @@ function buildViewModel(c) {
     recommendedFor: ov?.recommendedFor ?? deriveRecommended(c),
     pros: ov?.pros ?? (c.effects || []).slice(0, 6),
     cons: ov?.cons ?? (c.sideEffects || []).slice(0, 8),
-    communityNotes: ov?.communityNotes ?? deriveCommunity(c),
     studies,
     cycling: ov?.cycling ?? deriveCycling(c),
   };
@@ -872,9 +1171,16 @@ function scoreCompoundSearch(query, entry) {
 
 function deriveCardFrontSummary(c) {
   if (c.cardSummary && String(c.cardSummary).trim()) return String(c.cardSummary).trim();
+  const what = String(c.whatItIs || "").trim();
+  if (what && !isThinCompoundCopy(c)) {
+    const short = what.length > 140 ? what.slice(0, 137).trim() + "…" : what;
+    return short;
+  }
+  const fx = (c.effects || []).filter(Boolean).slice(0, 2).join(" · ");
+  if (fx) return fx;
   const firstMech = c.mechanism && c.mechanism[0] && c.mechanism[0].text;
   const path = (c.classification || "").trim();
-  if (firstMech) {
+  if (firstMech && firstMech !== path) {
     const short = firstMech.length > 110 ? firstMech.slice(0, 107).trim() + "…" : firstMech;
     return path ? `${short} · ${path}` : short;
   }
@@ -926,6 +1232,10 @@ function resolveDeepLinkFromLocation() {
   if (h) {
     if (COMPOUNDS.some((c) => c.id === h)) return { type: "compound", id: h };
     if (HARDMAXXING_LIST.some((s) => s.id === h)) return { type: "surgery", id: h };
+    if (h.startsWith("surgeon-")) {
+      const sid = h.replace(/^surgeon-/, "");
+      if (SURGEONS_DATA.some((s) => s.id === sid)) return { type: "surgeon", id: sid };
+    }
   }
 
   const parts = location.pathname.split("/").filter(Boolean).map((p) => p.trim().toLowerCase());
@@ -980,6 +1290,24 @@ function setLocationForSurgery(id) {
   history.replaceState(null, "", `${location.pathname}${location.search}#${sid}`);
 }
 
+function setLocationForSurgeon(id) {
+  const sid = String(id || "").trim();
+  if (!sid) return;
+  history.replaceState(null, "", `${location.pathname}${location.search}#surgeon-${sid}`);
+}
+
+function getSurgeonSourceLinks(s) {
+  const text = Array.isArray(s?.notes) ? s.notes.join(" ") : String(s?.notes || "");
+  return [...text.matchAll(/Source:\s*(https?:\/\/[^\s)]+)/gi)].map((match) => match[1]).filter(Boolean);
+}
+
+function getSurgeonNotesText(s) {
+  const notes = Array.isArray(s?.notes) ? s.notes : [s?.notes].filter(Boolean);
+  return notes
+    .map((line) => String(line).replace(/\bSource:\s*https?:\/\/[^\s)]+/gi, "").replace(/\bNote:\s*/gi, "").trim())
+    .filter(Boolean);
+}
+
 function applyInitialDeepLink() {
   const hit = resolveDeepLinkFromLocation();
   if (!hit) return;
@@ -1010,7 +1338,8 @@ function initDeepLinking() {
     const hit = resolveDeepLinkFromLocation();
     if (!hit) return;
     if (hit.type === "compound") openCompound(hit.id, { skipHash: true });
-    else openHardmaxSection(hit.id, { skipHash: true });
+    else if (hit.type === "surgery") openHardmaxSection(hit.id, { skipHash: true });
+    else if (hit.type === "surgeon") openSurgeon(hit.id, { skipHash: true });
   });
 }
 
@@ -1344,7 +1673,7 @@ function wireSurgeryDetailPage(s) {
 document.addEventListener("DOMContentLoaded", () => {
   applyNicknamesFromBundledText();
   rebuildCompoundSearchIndex();
-  normalizeCompoundCategories();
+  augmentCompoundCategoryBuckets();
   initTheme();
   updateBookmarkCount();
   renderCategoryCounts();
@@ -1367,7 +1696,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Ensure every compound has normalized category keys and derive missing top-level buckets
-function normalizeCompoundCategories() {
+function augmentCompoundCategoryBuckets() {
   if (!Array.isArray(COMPOUNDS)) return;
   for (const c of COMPOUNDS) {
     c.categories = Array.isArray(c.categories) ? c.categories : [];
@@ -1669,7 +1998,7 @@ function initCategoryFilters() {
         document.querySelectorAll(".cat-card").forEach((b) => b.classList.remove("active"));
         document.querySelectorAll(".pathway-chip").forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
-        const filtered = COMPOUNDS.filter((c) => c.categories.includes(cat));
+        const filtered = COMPOUNDS.filter((c) => normalizeCompoundCategories(c.categories).includes(cat));
         renderCompoundGrid(filtered);
         document.getElementById("listLabel").textContent = `${catLabel(cat)} (${filtered.length})`;
         document.getElementById("clearFilter").style.display = "flex";
@@ -1723,17 +2052,19 @@ function catLabel(cat) {
     performance: "Performance",
     "inhibition-lowering": "Inhibition-lowering",
     hair: "Hair",
+    peptide: "Peptides",
     peptides: "Peptides",
     looks: "Looks / Skin",
     hormones: "Hormones",
+    "steroid-aas": "Steroids",
   };
-  return labels[cat] || cat;
+  return labels[cat] || cat.replace(/-/g, " ").replace(/\b\w/g, (ch) => ch.toUpperCase());
 }
 
 function renderCategoryCounts() {
   ["fat-loss", "cognition", "skin", "recovery", "hair", "peptides", "looks", "hormones", "longevity", "performance", "inhibition-lowering"].forEach((cat) => {
     const el = document.getElementById(`count-${cat}`);
-    if (el) el.textContent = COMPOUNDS.filter((c) => c.categories.includes(cat)).length + " compounds";
+    if (el) el.textContent = COMPOUNDS.filter((c) => normalizeCompoundCategories(c.categories).includes(cat)).length + " compounds";
   });
 }
 
@@ -1742,13 +2073,17 @@ function renderCategoryCounts() {
 // ──────────────────────────────────────
 function renderCompoundGrid(compounds) {
   const grid = document.getElementById("compoundGrid");
-  grid.innerHTML = compounds.length
-    ? compounds.map((c, i) => compoundCardHTML(c, i)).join("")
+  const sorted = sortCompoundsForDisplay(compounds);
+  grid.innerHTML = sorted.length
+    ? sorted.map((c, i) => compoundCardHTML(c, i)).join("")
     : '<div class="empty-panel">No compounds match this filter.</div>';
 
   grid.querySelectorAll(".compound-card").forEach((card) => {
     card.querySelector(".card-body-click")?.addEventListener("click", () => {
       openCompound(card.dataset.id);
+    });
+    card.querySelectorAll("[data-open-compound]").forEach((el) => {
+      el.addEventListener("click", () => openCompound(el.getAttribute("data-open-compound")));
     });
     const bBtn = card.querySelector(".bookmark-btn");
     bBtn?.addEventListener("click", (e) => {
@@ -1761,10 +2096,13 @@ function renderCompoundGrid(compounds) {
 function compoundCardHTML(c, i) {
   const isBookmarked = bookmarks.includes(c.id);
   const aliases = c.aliases || [];
-  const categories = c.categories || [];
+  const categories = compoundDisplayCategories(c);
+  const classTag = c.classification
+    ? `<span class="tag tag-class">${escapeHtml(c.classification.length > 42 ? c.classification.slice(0, 39) + "…" : c.classification)}</span>`
+    : "";
 
   return `
-    <div class="compound-card" data-id="${c.id}" style="animation-delay:${i * 0.04}s">
+    <div class="compound-card" data-id="${escapeAttr(c.id)}" style="animation-delay:${i * 0.04}s">
       <div class="card-header">
         <div class="card-body-click" style="flex:1;cursor:pointer">
           <div class="card-name">${c.name}</div>
@@ -1773,21 +2111,22 @@ function compoundCardHTML(c, i) {
           ${isBookmarked ? "⊟" : "⊡"}
         </button>
       </div>
-      <div class="card-tags" style="cursor:pointer" onclick="openCompound('${c.id}')">
+      <div class="card-tags" style="cursor:pointer" data-open-compound="${escapeAttr(c.id)}">
         ${categories.map((cat) => `<span class="tag tag-cat">${catLabel(cat)}</span>`).join("")}
+        ${classTag}
         ${aliases
           .slice(0, 1)
           .map((a) => `<span class="tag tag-alias">${a}</span>`)
           .join("")}
       </div>
-      <div class="card-pathways" onclick="openCompound('${c.id}')" style="cursor:pointer">
+      <div class="card-pathways" data-open-compound="${escapeAttr(c.id)}" style="cursor:pointer">
         ${renderCompoundCardPathways(c)}
       </div>
-      <div class="card-mechanism card-summary" onclick="openCompound('${c.id}')" style="cursor:pointer">
+      <div class="card-mechanism card-summary" data-open-compound="${escapeAttr(c.id)}" style="cursor:pointer">
         ${escapeHtml(deriveCardFrontSummary(c))}
       </div>
-      <div class="card-footer-hint" onclick="openCompound('${c.id}')" style="cursor:pointer">
-        Effectiveness · safety · community notes →
+      <div class="card-footer-hint" data-open-compound="${escapeAttr(c.id)}" style="cursor:pointer">
+        Effectiveness · safety · studies →
       </div>
     </div>
   `;
@@ -1882,6 +2221,9 @@ function renderBookmarksView() {
     grid.innerHTML = saved.map((c, i) => compoundCardHTML(c, i)).join("");
     grid.querySelectorAll(".compound-card").forEach((card) => {
       card.querySelector(".card-body-click")?.addEventListener("click", () => openCompound(card.dataset.id));
+      card.querySelectorAll("[data-open-compound]").forEach((el) => {
+        el.addEventListener("click", () => openCompound(el.getAttribute("data-open-compound")));
+      });
       const bBtn = card.querySelector(".bookmark-btn");
       bBtn?.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -1895,8 +2237,37 @@ function renderBookmarksView() {
 // ──────────────────────────────────────
 // COMPOUND DETAIL
 // ──────────────────────────────────────
+function findCompoundRecord(idOrName) {
+  const needle = String(idOrName || "").trim().toLowerCase();
+  if (!needle) return null;
+
+  const exact = COMPOUNDS.find((item) => item.id === needle || item.id === idOrName);
+  if (exact) return exact;
+
+  const meta = typeof COMPOUND_META !== "undefined" && COMPOUND_META ? COMPOUND_META[idOrName] || COMPOUND_META[needle] : null;
+  if (meta?.name) {
+    const byMetaName = COMPOUNDS.find((item) => String(item.name || "").toLowerCase() === String(meta.name).toLowerCase());
+    if (byMetaName) return byMetaName;
+  }
+
+  const byAlias = COMPOUNDS.find((item) => {
+    const normalizedId = String(item.id || "").toLowerCase();
+    const normalizedName = String(item.name || "").toLowerCase();
+    const aliases = (item.aliases || []).map((a) => String(a || "").toLowerCase());
+    return normalizedId === needle || normalizedName === needle || aliases.includes(needle);
+  });
+  if (byAlias) return byAlias;
+
+  const familyKey = normalizeCompoundFamilyKey({ id: needle, name: needle, aliases: [needle] });
+  if (familyKey) {
+    return COMPOUNDS.find((item) => normalizeCompoundFamilyKey(item) === familyKey) || null;
+  }
+
+  return null;
+}
+
 function openCompound(id, opts) {
-  const c = COMPOUNDS.find((x) => x.id === id);
+  const c = findCompoundRecord(id);
   if (!c) return;
 
   document.getElementById("searchResults")?.classList.remove("open");
@@ -2073,14 +2444,18 @@ function renderSurgeonGrid() {
 }
 
 function surgeonCardHTML(s, i) {
-  const flag = s.location.country === "USA" ? "🇺🇸" : s.location.country === "South Korea" ? "🇰🇷" : s.location.country === "Belgium" ? "🇧🇪" : s.location.country === "Colombia" ? "🇨🇴" : s.location.country === "Turkey" ? "🇹🇷" : s.location.country === "Brazil" ? "🇧🇷" : "🌍";
+  const locationText = [s.location.city, s.location.state, s.location.country].filter(Boolean).join(", ");
+  const websiteLink = s.clinicUrl
+    ? `<a class="sc-link" href="${escapeAttr(s.clinicUrl)}" target="_blank" rel="noopener noreferrer">Visit website</a>`
+    : "";
+
   return `
     <div class="compound-card surgeon-card" data-id="${escapeAttr(s.id)}" style="animation-delay:${i * 0.03}s">
-      <div class="sc-flag">${escapeHtml(flag)}</div>
       <div class="card-header">
         <div style="flex:1">
-          <div class="sc-name">${escapeHtml(s.name)}</div>
-          <div class="sc-location">${escapeHtml(s.location.city)}, ${escapeHtml(s.location.state)} · ${escapeHtml(s.location.country)}</div>
+          <div class="sc-name"><strong>${escapeHtml(s.name)}</strong></div>
+          <div class="sc-clinic">${escapeHtml(s.clinic || "Clinic details unavailable")}</div>
+          <div class="sc-location">${escapeHtml(locationText)}</div>
         </div>
       </div>
       <div class="sc-tags">
@@ -2088,6 +2463,7 @@ function surgeonCardHTML(s, i) {
       </div>
       <div class="sc-rep sc-rep--${escapeHtml(s.forumReputation || "unknown")}">Forum rep: ${escapeHtml((s.forumReputation || "unknown").toUpperCase())}</div>
       <div class="sc-proc-count">${s.procedures.length} procedures listed</div>
+      ${websiteLink ? `<div class="sc-link-wrap">${websiteLink}</div>` : ""}
     </div>
   `;
 }
@@ -2099,7 +2475,7 @@ function openSurgeon(id, opts) {
   setNavSection("surgeons");
   showView("surgeonDetailView");
   if (!opts || !opts.skipHash) {
-    history.replaceState(null, "", `${location.pathname}${location.search}`);
+    setLocationForSurgeon(s.id);
   }
   wireSurgeonDetailPage(s);
 }
@@ -2112,14 +2488,17 @@ function buildSurgeonDetailHTML(s) {
       return `<button type="button" class="surgeon-proc-link" data-proc-id="${escapeAttr(pid)}">${escapeHtml(label)}</button>`;
     })
     .join("");
-  const threads = (s.patientThreads || [])
-    .map((t) => `<li><a href="${escapeAttr(t.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(t.label)}</a></li>`)
-    .join("");
+  const notesList = getSurgeonNotesText(s);
+  const sourceLinks = getSurgeonSourceLinks(s);
+  const clinicLink = s.clinicUrl
+    ? `<a href="${escapeAttr(s.clinicUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.clinic || s.clinicUrl)}</a>`
+    : escapeHtml(s.clinic || "Clinic details unavailable");
+  const locationText = [s.location.city, s.location.state, s.location.country].filter(Boolean).join(", ");
   return `
     <div class="detail-hero">
       <div class="detail-left">
-        <div class="detail-name">${escapeHtml(s.name)}</div>
-        <div class="detail-aliases">${escapeHtml(s.title)} · ${escapeHtml(s.clinic)}</div>
+        <div class="detail-name"><strong>${escapeHtml(s.name)}</strong></div>
+        <div class="detail-aliases">${escapeHtml(s.clinic || "Clinic details unavailable")}</div>
         <div class="detail-header-tags">
           <span class="tag tag-cat">${escapeHtml(s.location.country)}</span>
           <span class="tag tag-cat">${escapeHtml(s.location.state)}</span>
@@ -2132,11 +2511,11 @@ function buildSurgeonDetailHTML(s) {
       <div class="summary-grid" role="region" aria-label="At a glance">
         <div class="summary-card summary-effectiveness">
           <h3 class="summary-card-title">Clinic</h3>
-          <div class="summary-card-body"><a href="${escapeAttr(s.clinicUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.clinic)}</a></div>
+          <div class="summary-card-body">${clinicLink}</div>
         </div>
         <div class="summary-card summary-safety">
           <h3 class="summary-card-title">Location</h3>
-          <div class="summary-card-body">${escapeHtml(s.location.city)}, ${escapeHtml(s.location.state)} · ${escapeHtml(s.location.country)}</div>
+          <div class="summary-card-body">${escapeHtml(locationText)}</div>
         </div>
         <div class="summary-card summary-rec">
           <h3 class="summary-card-title">Specialties</h3>
@@ -2151,7 +2530,8 @@ function buildSurgeonDetailHTML(s) {
       <div class="detail-section">
         <div class="ds-label">Profile</div>
         <div class="ds-title">Approach</div>
-        <div class="ds-body">${escapeHtml(s.approach)}</div>
+        <div class="ds-body">${escapeHtml(s.approach || "No approach summary available yet.")}</div>
+        ${sourceLinks.length ? `<div class="ds-footnote">Source: ${sourceLinks.map((url) => `<a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`).join(" • ")}</div>` : ""}
       </div>
       <div class="detail-section">
         <div class="ds-label">Procedures</div>
@@ -2159,28 +2539,9 @@ function buildSurgeonDetailHTML(s) {
         <div class="surgeon-procs">${procedureLinks}</div>
       </div>
       <div class="detail-section">
-        <div class="ds-label">Forum links</div>
-        <div class="ds-title">Patient threads</div>
-        <ul class="forum-list">${threads}</ul>
-      </div>
-      <div class="detail-section">
-        <div class="ds-label">Community notes</div>
-        <div class="ds-title">Anonymous threads</div>
-        ${renderAnonThreadHtml({
-          name: "Anonymous",
-          date: "06/04/26(Thu)17:29:18",
-          id: "Ab9Y7z",
-          no: "9432",
-          body: [
-            "> Did Eppley do my infraorbital implant consult",
-            "Recovery was three weeks of swelling. Result looked clean in the follow-up photos. Patients report good orbital support and stable implant position."
-          ]
-        })}
-      </div>
-      <div class="detail-section">
-        <div class="ds-label">Notes</div>
-        <div class="ds-title">Community reputation</div>
-        <div class="ds-body">${escapeHtml(s.notes)}</div>
+        <div class="ds-label">Research notes</div>
+        <div class="ds-title">What to verify</div>
+        <div class="ds-body">${notesList.length ? notesList.map((line) => `<p class="surgeon-note-line">${escapeHtml(line)}</p>`).join("") : "No research notes are available for this profile yet."}</div>
       </div>
     </div>
   `;
@@ -2191,7 +2552,8 @@ function wireSurgeonDetailPage(s) {
     openEditRequestDialog({ kind: "surgeon", id: s.id, title: s.name });
   });
   document.getElementById("surgeonCopyLinkBtn")?.addEventListener("click", async () => {
-    const url = `${location.origin}${location.pathname}${location.search}`;
+    const url = `${location.origin}${location.pathname}${location.search}#surgeon-${encodeURIComponent(s.id)}`;
+    history.replaceState(null, "", url);
     try {
       await navigator.clipboard.writeText(url);
       const el = document.getElementById("surgeonCopyLinkBtn");
@@ -2331,9 +2693,7 @@ function buildHardmaxDetailHTML(s) {
         <div class="surgeon-chips">
           ${getSurgeonsForProcedure(s.id)
             .map(
-              (sur) => `<button type="button" class="surgeon-chip" data-surgeon-id="${escapeAttr(sur.id)}">${escapeHtml(
-                (sur.location.country === "USA" ? "🇺🇸 " : sur.location.country === "South Korea" ? "🇰🇷 " : sur.location.country === "Belgium" ? "🇧🇪 " : sur.location.country === "Colombia" ? "🇨🇴 " : sur.location.country === "Turkey" ? "🇹🇷 " : sur.location.country === "Brazil" ? "🇧🇷 " : "🌍 ") + sur.name
-              )}</button>`)
+              (sur) => `<button type="button" class="surgeon-chip" data-surgeon-id="${escapeAttr(sur.id)}">${escapeHtml(sur.name)}</button>`)
             .join("")}
         </div>
       </div>
@@ -2565,7 +2925,7 @@ function buildDetailHTML(c) {
           Also known as: <span>${(c.aliases || []).map((a) => escapeHtml(a)).join(", ")}</span>
         </div>
         <div class="detail-header-tags">
-          ${(c.categories || []).map((cat) => `<span class="tag tag-cat">${escapeHtml(catLabel(cat))}</span>`).join("")}
+          ${normalizeCompoundCategories(c.categories).map((cat) => `<span class="tag tag-cat">${escapeHtml(catLabel(cat))}</span>`).join("")}
           <span class="tag tag-class">${escapeHtml(c.classification || "")}</span>
         </div>
         <div class="detail-hero-actions detail-action-row">
@@ -2634,45 +2994,24 @@ function buildDetailHTML(c) {
       </div>
 
       <div class="detail-section">
-        <div class="ds-label">03 / Community</div>
-        <div class="ds-title">Discussion & anecdotes</div>
-        <div class="community-box">
-          <p>${escapeHtml(vm.communityNotes)}</p>
-          <p class="community-disclaimer">Anecdotes are not evidence of safety or efficacy.</p>
-        </div>
-        ${renderAnonThreadHtml({
-          name: "Anonymous",
-          date: "06/04/26(Thu)17:29:18",
-          id: "x8B9aK",
-          no: "8821",
-          body: [
-            "> been running mk677 for 6 months",
-            "> lethargy was rough weeks 1-3",
-            "Water retention is real. Recommend timing dose before bed to sleep through the hunger spike. IGF-1 bloodwork at month 3 came back significantly elevated vs baseline."
-          ]
-        })}
-      </div>
-
-      <div class="detail-section">
-        <div class="ds-label">04 / Cycling</div>
+        <div class="ds-label">03 / Cycling</div>
         <div class="ds-title">Duration & patterns</div>
         <div class="cycling-box">
           <p>${escapeHtml(vm.cycling)}</p>
-          ${forumCycleLinksHtml(c)}
         </div>
       </div>
 
       <div class="detail-section">
-        <div class="ds-label">05 / Overview</div>
+        <div class="ds-label">04 / Overview</div>
         <div class="ds-title">What it is</div>
         <div class="ds-body">${escapeHtml(c.whatItIs || "")}</div>
       </div>
 
       <div class="detail-section">
-        <div class="ds-label">06 / Biology</div>
+        <div class="ds-label">05 / Biology</div>
         <div class="ds-title">Mechanism</div>
         <ul class="mechanism-list">
-          ${c.mechanism
+          ${(c.mechanism || [])
             .map(
               (m) => `
             <li>
@@ -2689,36 +3028,36 @@ function buildDetailHTML(c) {
       </div>
 
       <div class="detail-section">
-        <div class="ds-label">07 / Regulatory</div>
+        <div class="ds-label">06 / Regulatory</div>
         <div class="ds-title">Legal status</div>
         <div class="legal-grid">
           <div class="legal-item">
             <div class="legal-item-label">FDA status</div>
-            <div class="legal-item-value">${escapeHtml(c.legal.fda)}</div>
+            <div class="legal-item-value">${escapeHtml(c.legal?.fda || "—")}</div>
           </div>
           <div class="legal-item">
             <div class="legal-item-label">Prescription</div>
-            <div class="legal-item-value">${escapeHtml(c.legal.prescription)}</div>
+            <div class="legal-item-value">${escapeHtml(c.legal?.prescription || "—")}</div>
           </div>
           <div class="legal-item">
             <div class="legal-item-label">Classification</div>
-            <div class="legal-item-value">${escapeHtml(c.legal.classification)}</div>
+            <div class="legal-item-value">${escapeHtml(c.legal?.classification || c.classification || "—")}</div>
           </div>
           <div class="legal-item">
             <div class="legal-item-label">Sports (WADA)</div>
-            <div class="legal-item-value">${escapeHtml(c.legal.sports)}</div>
+            <div class="legal-item-value">${escapeHtml(c.legal?.sports || "—")}</div>
           </div>
         </div>
       </div>
 
       ${
-        c.misconceptions.length
+        (c.misconceptions || []).length
           ? `
       <div class="detail-section">
-        <div class="ds-label">08 / Reality check</div>
+        <div class="ds-label">07 / Reality check</div>
         <div class="ds-title">Common misconceptions</div>
         <div class="misconception-list">
-          ${c.misconceptions
+          ${(c.misconceptions || [])
             .map(
               (m) => `
             <div class="misconception-item">
@@ -2751,7 +3090,7 @@ function buildDetailHTML(c) {
         <div class="ds-label">10 / References</div>
         <div class="ds-title">References</div>
         <div class="references-list">
-          ${c.references
+          ${(c.references || [])
             .map(
               (r, i) => `
             <div class="reference-item">
